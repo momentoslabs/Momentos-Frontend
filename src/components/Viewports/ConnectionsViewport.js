@@ -16,15 +16,6 @@ const ConnectionsViewport = ({ profile = {}, setConnectionsVisible }) => {
 
   const navigate = useNavigate();
 
-  const connections = [
-    { id: 1, username: "bob", color: "#0cff20", emoji: "⛺️" },
-    { id: 2, username: "sam", color: "#ff4341", emoji: "📺" },
-    { id: 3, username: "willy", color: "#f89721", emoji: "🎩" },
-    { id: 4, username: "jane", color: "#e1ccf1", emoji: "🥶" },
-    { id: 5, username: "keke", color: "#cde7f1", emoji: "🪐" },
-    { id: 6, username: "himmyneutron", color: "#fff401", emoji: "🖍" },
-  ];
-
   const results = [
     { id: 1, username: "bob", color: "#0cff20", emoji: "⛺️" },
     { id: 2, username: "sam", color: "#ff4341", emoji: "📺" },
@@ -124,8 +115,8 @@ const ConnectionsViewport = ({ profile = {}, setConnectionsVisible }) => {
             <br />
             {!searchVisible && (
               <div>
-                {connections.map((connection, index) => (
-                  <ProfileChip profile={connection} />
+                {profile.connections.map((connection, index) => (
+                  <ProfileChip profile={profile} id={connection} />
                 ))}
               </div>
             )}
@@ -157,7 +148,7 @@ const ConnectionsViewport = ({ profile = {}, setConnectionsVisible }) => {
                   />
                 </form>
                 {results.map((result, index) => (
-                  <ProfileChip profile={result} />
+                  <ProfileChip profile={profile} id={result} />
                 ))}
               </div>
             )}

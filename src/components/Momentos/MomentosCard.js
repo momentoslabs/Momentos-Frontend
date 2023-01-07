@@ -1,13 +1,36 @@
 import React, { useState, useEffect } from "react";
-import { useWindowDimensions } from "../../utils/CustomHooks";
-
-import edit from "../../graphics/icons/edit.png";
+import axios from "axios";
 
 const MomentosCard = ({ data = {} }) => {
   const [reactedLike, setReactedLike] = useState(false);
   const [reactedFire, setReactedFire] = useState(false);
   const [reactedClap, setReactedClap] = useState(false);
   const [reactedLaugh, setReactedLaugh] = useState(false);
+
+  const [user, setUser] = useState({});
+
+  const requestConfig = {
+    headers: {
+      "x-api-key": process.env.REACT_APP_API_KEY,
+    },
+  };
+
+  useEffect(() => {
+    const getUser = async () => {
+      await axios
+        .get(
+          `${process.env.REACT_APP_USERS_API_URL}/users/${data.ownerid}`,
+          requestConfig
+        )
+        .then((response) => {
+          setUser(response.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+    getUser();
+  }, []);
 
   return (
     <div
@@ -26,7 +49,7 @@ const MomentosCard = ({ data = {} }) => {
             padding: "10px 0px",
           }}
         >
-          @toluooshy
+          @{user.username}
         </div>
         <img src={data.image} style={{ borderRadius: "25px", width: "100%" }} />
         <div

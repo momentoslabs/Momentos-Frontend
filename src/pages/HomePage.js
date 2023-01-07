@@ -44,12 +44,12 @@ const HomePage = ({}) => {
         margin: "auto",
       }}
     >
-      {/* {(signupVisible || searchParams.get("action") === "signup") && (
+      {(signupVisible || searchParams.get("action") === "signup") && (
         <SignupViewport setSignupVisible={setSignupVisible} />
       )}
       {(signinVisible || searchParams.get("action") === "signin") && (
         <SigninViewport setSigninVisible={setSigninVisible} />
-      )} */}
+      )}
       <div style={{ margin: "auto" }}>
         <MomentosList />
       </div>

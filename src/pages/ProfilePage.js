@@ -1,30 +1,43 @@
 "use es6";
 
-import React, { useState, useEffect } from "react";
-import { json, useNavigate, useParams } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import { getUser, resetUserSession } from "../services/AuthService";
 
 import ProfileCard from "../components/Profile/ProfileCard";
-import ProfileMomentos from "../components/Profile/ProfileMomentos";
+import ProfileItems from "../components/Profile/ProfileItems";
 
-import axios from "axios";
-import { useWindowDimensions } from "../utils/CustomHooks";
 import ProfileUpload from "../components/Profile/ProfileUpload";
 
 const ProfilePage = () => {
   const navigate = useNavigate();
+  const profile = getUser();
+  const [user, setUser] = useState({});
 
-  // const user = getUser();
-  const user = {
-    id: 123456789,
-    username: "toluooshy",
-    name: "Tolu Oshinowo",
-    email: "toluooshy@gmail.com",
-    color: "#ccfff3",
-    emoji: "🧢",
-    connections: [1, 2, 3, 4, 5, 6],
-    images: [1, 2, 3, 4, 2, 2, 2, 2, 2, 4, 2, 2, 2, 2, 3, 2, 2, 2, 2, 2, 2],
+  const requestConfig = {
+    headers: {
+      "x-api-key": process.env.REACT_APP_API_KEY,
+    },
   };
+
+  useEffect(() => {
+    const getUser = async () => {
+      await axios
+        .get(
+          `${process.env.REACT_APP_USERS_API_URL}/users/${profile.id}`,
+          requestConfig
+        )
+        .then((response) => {
+          setUser(response.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+    getUser();
+  }, []);
+
   const signoutHandler = () => {
     resetUserSession();
     navigate("/");
@@ -40,10 +53,10 @@ const ProfilePage = () => {
       <div style={{ width: "100%" }}>
         <ProfileCard profile={user} />
         <ProfileUpload profile={user} />
-        <ProfileMomentos profile={user} />
+        <ProfileItems profile={user} />
       </div>
       <button
-        style={{ border: "none" }}
+        className="textinput"
         onClick={() => {
           signoutHandler();
         }}

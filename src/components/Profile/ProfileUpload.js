@@ -10,9 +10,10 @@ import snap from "../../graphics/icons/snap.png";
 import back from "../../graphics/icons/back.png";
 import rotate from "../../graphics/icons/rotate.png";
 import upload from "../../graphics/icons/upload.png";
+import Timer from "../Timer/Timer";
 
 const ProfileUpload = ({ profile = {} }) => {
-  const uploadActive = true;
+  const uploadActive = Date.now() - profile.lastactive >= 86400000;
   const [uploadModalOpen, setUploadModalOpen] = useState(false);
   const [description, setDescription] = useState("");
   const [img, setImg] = useState(null);
@@ -36,14 +37,17 @@ const ProfileUpload = ({ profile = {} }) => {
     setImg(imageSrc);
   }, [webcamRef]);
 
-  const submitHandler = (event) => {
+  const submitHandler = async (event) => {
     event.preventDefault();
     const requestConfig = {
       headers: {
         "x-api-key": process.env.REACT_APP_API_KEY,
       },
     };
-    const requestBody = {
+    const id = Date.now();
+    const requestBody1 = {
+      id: id,
+      ownerid: profile.id,
       description: description,
       image: img,
       likes: 0,
@@ -51,11 +55,19 @@ const ProfileUpload = ({ profile = {} }) => {
       claps: 0,
       laughs: 0,
     };
-
-    axios
+    const requestBody2 = {
+      items: id,
+      lastactive: Date.now(),
+    };
+    await axios.post(
+      `${process.env.REACT_APP_ITEMS_API_URL}/items`,
+      requestBody1,
+      requestConfig
+    );
+    await axios
       .post(
-        `${process.env.REACT_APP_USERS_API_URL}/users`,
-        requestBody,
+        `${process.env.REACT_APP_USERS_API_URL}/users/${profile.id}`,
+        requestBody2,
         requestConfig
       )
       .then(() => {
@@ -76,16 +88,33 @@ const ProfileUpload = ({ profile = {} }) => {
         style={{
           margin: "30px auto",
         }}
-        onClick={() => {
-          setUploadModalOpen(true);
-          blockScroll();
-        }}
       >
-        <button
-          className={uploadActive ? "uploadbutton" : "uploadbutton disabled"}
-        >
-          Upload Momento
-        </button>
+        {typeof profile.lastactive === "number" && (
+          <div>
+            {!!uploadActive ? (
+              <button
+                onClick={() => {
+                  setUploadModalOpen(true);
+                  blockScroll();
+                }}
+                className="uploadbutton"
+              >
+                Upload Momento
+              </button>
+            ) : (
+              <div>
+                <button className="uploadbutton disabled">
+                  Upload Momento
+                </button>
+                <br />
+                <small style={{ display: "flex", justifyContent: "center" }}>
+                  upload again in&nbsp;
+                  <Timer endtime={profile.lastactive + 86400000} />
+                </small>
+              </div>
+            )}
+          </div>
+        )}
       </div>
       {uploadModalOpen && (
         <div className="camera-container">

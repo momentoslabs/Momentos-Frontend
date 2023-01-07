@@ -65,14 +65,14 @@ code {
   box-shadow: 0px 0px 3px 0px rgba(0,0,0,0.25);
 }
 
-.imagebox {
-  background-color: #d9d9d9;
+.itembox {
+  background-color: #f7f7f7;
   color:#ffffff;
   font-size: 48px;
   border-radius: 10px;
-  border:none;
+  border: #f7f7f7 solid 1px;
   text-align: left;
-  margin: 10px;
+  margin: 5px;
   width: 100px;
   height: 100px;
 }
@@ -90,7 +90,7 @@ code {
   border-radius: 25px;
   border: solid 2px #212121;
   padding: 10px;
-  margin: 10px 10px;
+  margin: 5px;
 }
 
 .uploadbutton {
@@ -128,6 +128,10 @@ code {
   cursor: not-allowed;
 }
 
+.message {
+  color: #dc142b
+}
+
 .modal-container {
   position: fixed;
   top: 0;
@@ -147,5 +151,16 @@ code {
   left: 0;
   z-index: 1000;
   background-color: #000000;
+  display: flex;
+}
+
+.cover-container {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1000;
+  background-color: #ffffff;
   display: flex;
 }

@@ -4,17 +4,10 @@ import React, { useState } from "react";
 import axios from "axios";
 import { setUserSession } from "../../services/AuthService";
 import { useNavigate } from "react-router-dom";
-import { useWindowDimensions } from "../../utils/CustomHooks";
 import { useSearchParams } from "react-router-dom";
 
 const SigninViewport = ({ children, setSigninVisible }) => {
-  const style = {
-    textDecoration: "none",
-  };
-
   const navigate = useNavigate();
-
-  const dimensions = useWindowDimensions();
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -57,31 +50,28 @@ const SigninViewport = ({ children, setSigninVisible }) => {
   };
 
   return (
-    <div
-      style={{ height: dimensions.height * 0.8 }}
-      closeFunction={() => {
-        setSearchParams({});
-        setSigninVisible(false);
-      }}
-    >
+    <div className="cover-container">
       <div
         style={{
-          position: "relative",
-          top: "25%",
+          margin: "auto",
         }}
       >
+        <h1 className="title">Momentos</h1>
         <form
           onSubmit={submitHandler}
           style={{
             textAlign: "center",
-            padding: "10px",
+            justifyContent: "center",
+            width: "100%",
+            margin: "auto",
           }}
         >
-          <p className="label" style={{ textAlign: "center" }}>
-            Sign In
-          </p>
+          <h3 className="label" style={{ textAlign: "center" }}>
+            <i>Sign In</i>
+          </h3>
           <input
             className="textinput"
+            style={{ width: "300px" }}
             type="text"
             value={username}
             placeholder="Username"
@@ -91,6 +81,7 @@ const SigninViewport = ({ children, setSigninVisible }) => {
           <br />
           <input
             className="textinput"
+            style={{ width: "300px" }}
             type="password"
             value={password}
             placeholder="Password"
@@ -99,14 +90,14 @@ const SigninViewport = ({ children, setSigninVisible }) => {
           />{" "}
           <br />
           <input
-            className="submitInput"
+            className="textinput"
             type="submit"
-            value="Log In"
+            value="Sign In"
             style={{ marginTop: "10px", width: "25%" }}
           />
           <br />
           <p style={{ color: "#555555" }}>
-            Need a new account? Sign up
+            Need an account? Sign up
             <a
               style={{ color: "#5576FF" }}
               onClick={() => {

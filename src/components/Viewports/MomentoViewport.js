@@ -1,18 +1,38 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import { useWindowDimensions } from "../../utils/CustomHooks";
+import MomentosCard from "../Momentos/MomentosCard";
 
-const MomentoViewport = ({ profile = {}, setMomentoVisible }) => {
+const MomentoViewport = ({ data = {}, setMomentoVisible }) => {
   return (
-    <div
-      style={{
-        position: "absolute",
-        height: "fit-content",
-        width: "90%",
-        margin: "auto",
-      }}
-    ></div>
+    <div className="modal-container">
+      <div
+        style={{
+          backgroundColor: "#ffffff",
+          width: "300px",
+          borderRadius: "25px",
+          height: "fit-content",
+          padding: "15px",
+          margin: "auto",
+        }}
+      >
+        <div>
+          <div
+            style={{
+              fontWeight: "bold",
+              fontSize: "large",
+              textAlign: "left",
+              margin: "5px 0px",
+            }}
+            onClick={() => {
+              setMomentoVisible(false);
+            }}
+          >
+            &#10005;
+          </div>
+          <MomentosCard data={data} />
+        </div>
+      </div>
+    </div>
   );
 };
 

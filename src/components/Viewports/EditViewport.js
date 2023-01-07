@@ -14,6 +14,7 @@ const EditViewport = ({ profile = {}, setEditVisible }) => {
 
   const submitHandler = (event) => {
     event.preventDefault();
+    console.log(profile.id);
     const requestConfig = {
       headers: {
         "x-api-key": process.env.REACT_APP_API_KEY,
@@ -29,7 +30,7 @@ const EditViewport = ({ profile = {}, setEditVisible }) => {
 
     axios
       .post(
-        `${process.env.REACT_APP_USERS_API_URL}/users`,
+        `${process.env.REACT_APP_USERS_API_URL}/users/${profile.id}`,
         requestBody,
         requestConfig
       )
@@ -128,7 +129,7 @@ const EditViewport = ({ profile = {}, setEditVisible }) => {
                 type="emoji"
                 value={emoji}
                 placeholder="New emoji"
-                maxlength="1"
+                maxlength="12"
                 onChange={(event) => setEmoji(event.target.value)}
               />
               <input

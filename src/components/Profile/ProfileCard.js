@@ -34,7 +34,7 @@ const ProfileCard = ({ profile = {} }) => {
             <div
               style={{
                 position: "relative",
-                top: "60px",
+                top: "64px",
                 fontSize: "64px",
               }}
             >
@@ -71,19 +71,26 @@ const ProfileCard = ({ profile = {} }) => {
             src={edit}
           />
         </div>
-        <div
-          style={{
-            position: "relative",
-            top: "15px",
-            margin: "5px",
-          }}
-          onClick={() => setConnectionsVisible(true)}
-        >
-          {profile.connections.length} connections
-        </div>
-        {editVisible && <EditViewport setEditVisible={setEditVisible} />}
+        {!!profile.connections && (
+          <div
+            style={{
+              position: "relative",
+              top: "15px",
+              margin: "5px",
+            }}
+            onClick={() => setConnectionsVisible(true)}
+          >
+            {profile.connections.length} connections
+          </div>
+        )}
+        {editVisible && (
+          <EditViewport profile={profile} setEditVisible={setEditVisible} />
+        )}
         {connectionsVisible && (
-          <ConnectionsViewport setConnectionsVisible={setConnectionsVisible} />
+          <ConnectionsViewport
+            profile={profile}
+            setConnectionsVisible={setConnectionsVisible}
+          />
         )}
       </div>
     </div>

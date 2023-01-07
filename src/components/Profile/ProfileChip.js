@@ -1,15 +1,38 @@
-import React from "react";
-
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import { useWindowDimensions } from "../../utils/CustomHooks";
 
-const ProfileChip = ({ profile = {} }) => {
-  const connections = [1, 2, 3];
+const ProfileChip = ({ profile = {}, id = {} }) => {
+  const [user, setUser] = useState({});
+
+  const requestConfig = {
+    headers: {
+      "x-api-key": process.env.REACT_APP_API_KEY,
+    },
+  };
+
+  useEffect(() => {
+    const getUser = async () => {
+      await axios
+        .get(
+          `${process.env.REACT_APP_USERS_API_URL}/users/${id}`,
+          requestConfig
+        )
+        .then((response) => {
+          setUser(response.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+    getUser();
+  }, []);
 
   return (
     <div style={{ display: "flex" }}>
       <div
         style={{
-          backgroundColor: `${profile.color}`,
+          backgroundColor: `${user.color}`,
           width: "48px",
           height: "48px",
           borderRadius: "50%",
@@ -24,7 +47,7 @@ const ProfileChip = ({ profile = {} }) => {
             fontSize: "24px",
           }}
         >
-          {profile.emoji}
+          {user.emoji}
         </div>
       </div>
       <div
@@ -33,8 +56,8 @@ const ProfileChip = ({ profile = {} }) => {
           lineHeight: "5%",
         }}
       >
-        <p style={{ fontWeight: "bold" }}>@{profile.username}</p>
-        {connections.indexOf(profile.id) !== -1 ? (
+        <p style={{ fontWeight: "bold" }}>@{user.username}</p>
+        {profile.connections.indexOf(user.id) !== -1 ? (
           <button
             className="connectbutton active"
             style={{ height: "22px", margin: "-2px 0px", width: "100px" }}
