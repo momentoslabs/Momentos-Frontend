@@ -61,6 +61,7 @@ const ProfileCard = ({ profile = {} }) => {
             {profile.name}
           </h2>
           <img
+            className="highlightable"
             style={{
               position: "relative",
               top: "-10px",
@@ -73,6 +74,7 @@ const ProfileCard = ({ profile = {} }) => {
         </div>
         {!!profile.connections && (
           <div
+            className="highlightable"
             style={{
               position: "relative",
               top: "15px",
@@ -80,7 +82,7 @@ const ProfileCard = ({ profile = {} }) => {
             }}
             onClick={() => setConnectionsVisible(true)}
           >
-            {profile.connections.length} connections
+            {Object.keys(profile.connections).length} connections
           </div>
         )}
         {editVisible && (

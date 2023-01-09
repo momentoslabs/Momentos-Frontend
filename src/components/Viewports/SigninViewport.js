@@ -3,8 +3,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { setUserSession } from "../../services/AuthService";
-import { useNavigate } from "react-router-dom";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 const SigninViewport = ({ children, setSigninVisible }) => {
   const navigate = useNavigate();

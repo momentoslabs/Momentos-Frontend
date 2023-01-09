@@ -35,7 +35,6 @@ const EditViewport = ({ profile = {}, setEditVisible }) => {
         requestConfig
       )
       .then(() => {
-        navigate("/profile");
         setEditVisible(false);
         window.location.reload();
       })

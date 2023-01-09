@@ -11,10 +11,12 @@ import back from "../../graphics/icons/back.png";
 import rotate from "../../graphics/icons/rotate.png";
 import upload from "../../graphics/icons/upload.png";
 import Timer from "../Timer/Timer";
+import NoticeViewport from "../Viewports/NoticeViewport";
 
 const ProfileUpload = ({ profile = {} }) => {
   const uploadActive = Date.now() - profile.lastactive >= 86400000;
   const [uploadModalOpen, setUploadModalOpen] = useState(false);
+  const [noticeVisible, setNoticeVisible] = useState(false);
   const [description, setDescription] = useState("");
   const [img, setImg] = useState(null);
   const [frontCameraActive, setFrontCameraActive] = useState(true);
@@ -103,13 +105,26 @@ const ProfileUpload = ({ profile = {} }) => {
               </button>
             ) : (
               <div>
-                <button className="uploadbutton disabled">
+                <button
+                  onClick={() => {
+                    setNoticeVisible(true);
+                  }}
+                  className="uploadbutton disabled"
+                >
                   Upload Momento
                 </button>
                 <br />
                 <small style={{ display: "flex", justifyContent: "center" }}>
                   upload again in&nbsp;
                   <Timer endtime={profile.lastactive + 86400000} />
+                  {!!noticeVisible && (
+                    <NoticeViewport
+                      setNoticeVisible={setNoticeVisible}
+                      message={
+                        "You have already uploaded your momento for today. Hope to see you tomorrow! 😄"
+                      }
+                    />
+                  )}
                 </small>
               </div>
             )}

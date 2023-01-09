@@ -164,3 +164,11 @@ code {
   background-color: #ffffff;
   display: flex;
 }
+
+.highlightable {
+  opacity: 100%;
+}
+
+.active, .highlightable:hover {
+  opacity: 50%;
+}

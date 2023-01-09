@@ -8,44 +8,45 @@ import search from "../../graphics/icons/search.png";
 
 const ConnectionsViewport = ({ profile = {}, setConnectionsVisible }) => {
   const [searchVisible, setSearchVisible] = useState(false);
+  const [user, setUser] = useState({});
   const [searchedUsername, setSearchedUsername] = useState("");
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [color, setColor] = useState("");
-  const [emoji, setEmoji] = useState("");
+  const [results, setResults] = useState([]);
 
-  const navigate = useNavigate();
+  const requestConfig = {
+    headers: {
+      "x-api-key": process.env.REACT_APP_API_KEY,
+    },
+  };
 
-  const results = [
-    { id: 1, username: "bob", color: "#0cff20", emoji: "⛺️" },
-    { id: 2, username: "sam", color: "#ff4341", emoji: "📺" },
-    { id: 3, username: "willy", color: "#f89721", emoji: "🎩" },
-    { id: 4, username: "jane", color: "#e1ccf1", emoji: "🥶" },
-    { id: 5, username: "keke", color: "#cde7f1", emoji: "🪐" },
-    { id: 6, username: "himmyneutron", color: "#fff401", emoji: "🖍" },
-  ];
+  useEffect(() => {
+    const getUser = async () => {
+      await axios
+        .get(
+          `${process.env.REACT_APP_USERS_API_URL}/users/${profile.id}`,
+          requestConfig
+        )
+        .then((response) => {
+          setUser(response.data);
+          console.log(response.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+    getUser();
+  }, []);
 
   const submitHandler = (event) => {
     event.preventDefault();
-    const requestConfig = {
-      headers: {
-        "x-api-key": process.env.REACT_APP_API_KEY,
-      },
-    };
-    const requestBody = {
-      username: username,
-    };
 
     axios
-      .post(
-        `${process.env.REACT_APP_USERS_API_URL}/users`,
-        requestBody,
+      .get(
+        `${process.env.REACT_APP_USERS_API_URL}/users/${searchedUsername}`,
         requestConfig
       )
-      .then(() => {
-        navigate("/profile");
-        setConnectionsVisible(false);
-        window.location.reload();
+      .then((response) => {
+        console.log(response.data);
+        setResults([response.data]);
       })
       .catch((error) => {
         console.log(error);
@@ -83,6 +84,7 @@ const ConnectionsViewport = ({ profile = {}, setConnectionsVisible }) => {
               }}
               onClick={() => {
                 setConnectionsVisible(false);
+                window.location.reload();
               }}
             >
               &#10005;
@@ -98,6 +100,7 @@ const ConnectionsViewport = ({ profile = {}, setConnectionsVisible }) => {
               }}
             >
               <p
+                className="highlightable"
                 style={{
                   textDecoration: !searchVisible ? "underline" : "none",
                 }}
@@ -106,6 +109,7 @@ const ConnectionsViewport = ({ profile = {}, setConnectionsVisible }) => {
                 Connections
               </p>
               <p
+                className="highlightable"
                 style={{ textDecoration: searchVisible ? "underline" : "none" }}
                 onClick={() => setSearchVisible(true)}
               >
@@ -113,43 +117,58 @@ const ConnectionsViewport = ({ profile = {}, setConnectionsVisible }) => {
               </p>
             </div>
             <br />
-            {!searchVisible && (
+            {!!user.connections && (
               <div>
-                {profile.connections.map((connection, index) => (
-                  <ProfileChip profile={profile} id={connection} />
-                ))}
-              </div>
-            )}
-            {searchVisible && (
-              <div>
-                <form
-                  onSubmit={submitHandler}
-                  style={{
-                    display: "flex",
-                    justifyContent: "center",
-                  }}
-                >
-                  <input
-                    className="textinput"
-                    style={{ width: "200px" }}
-                    type="searchedUsername"
-                    value={searchedUsername}
-                    placeholder="Search by username"
-                    maxlength="24"
-                    onChange={(event) =>
-                      setSearchedUsername(event.target.value)
-                    }
-                  />
-                  <input
-                    className="textinput"
-                    type="image"
-                    src={search}
-                    width="24px"
-                  />
-                </form>
-                {results.map((result, index) => (
-                  <ProfileChip profile={profile} id={result} />
-                ))}
+                {!searchVisible && (
+                  <div>
+                    {Object.keys(user.connections).length > 0 ? (
+                      <div>
+                        {Object.keys(user.connections).map(
+                          (connection, index) => (
+                            <ProfileChip profile={user} id={connection} />
+                          )
+                        )}
+                      </div>
+                    ) : (
+                      <p style={{ lineHeight: "100%" }}>
+                        Start searching to connect with friends and they will
+                        show up here! 📇
+                      </p>
+                    )}
+                  </div>
+                )}
+                {searchVisible && (
+                  <div>
+                    <form
+                      onSubmit={submitHandler}
+                      style={{
+                        display: "flex",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <input
+                        className="textinput"
+                        style={{ width: "300px" }}
+                        type="searchedUsername"
+                        value={searchedUsername}
+                        placeholder="Search by username"
+                        maxlength="24"
+                        onChange={(event) =>
+                          setSearchedUsername(event.target.value)
+                        }
+                      />
+                      <input
+                        className="textinput"
+                        type="image"
+                        src={search}
+                        width="24px"
+                      />
+                    </form>
+                    {results.map((result, index) => (
+                      <ProfileChip profile={user} id={result.id} />
+                    ))}
+                  </div>
+                )}
               </div>
             )}
           </div>

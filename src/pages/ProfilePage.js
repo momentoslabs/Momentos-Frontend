@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { getUser, resetUserSession } from "../services/AuthService";
+import { getUser } from "../services/AuthService";
 
 import ProfileCard from "../components/Profile/ProfileCard";
 import ProfileItems from "../components/Profile/ProfileItems";
@@ -11,7 +11,6 @@ import ProfileItems from "../components/Profile/ProfileItems";
 import ProfileUpload from "../components/Profile/ProfileUpload";
 
 const ProfilePage = () => {
-  const navigate = useNavigate();
   const profile = getUser();
   const [user, setUser] = useState({});
 
@@ -38,12 +37,6 @@ const ProfilePage = () => {
     getUser();
   }, []);
 
-  const signoutHandler = () => {
-    resetUserSession();
-    navigate("/");
-    window.location.reload();
-  };
-
   return (
     <div
       style={{
@@ -55,14 +48,7 @@ const ProfilePage = () => {
         <ProfileUpload profile={user} />
         <ProfileItems profile={user} />
       </div>
-      <button
-        className="textinput"
-        onClick={() => {
-          signoutHandler();
-        }}
-      >
-        Sign out
-      </button>
+
       <br />
       <br />
     </div>
