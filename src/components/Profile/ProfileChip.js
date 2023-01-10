@@ -10,7 +10,6 @@ const ProfileChip = ({ profile = {}, id = {}, requesting = false }) => {
   const [user, setUser] = useState({});
   const [mode, setMode] = useState(0);
   const [isVisible, setIsVisible] = useState(true);
-  const [isRequested, setIsRequested] = useState(false);
 
   const requestConfig = {
     headers: {
@@ -201,7 +200,6 @@ const ProfileChip = ({ profile = {}, id = {}, requesting = false }) => {
                   style={{ height: "22px", margin: "-2px 0px", width: "100px" }}
                   onClick={() => {
                     handleConnection(1);
-                    setIsRequested(true);
                   }}
                 >
                   Connect
@@ -232,24 +230,6 @@ const ProfileChip = ({ profile = {}, id = {}, requesting = false }) => {
                   }}
                   onClick={() => {
                     handleConnection(0);
-                    setIsRequested(false);
-                  }}
-                >
-                  Requested
-                </button>
-              )}
-
-              {isRequested && (
-                <button
-                  className="connectbutton active"
-                  style={{
-                    height: "22px",
-                    margin: "-2px 0px",
-                    width: "100px",
-                  }}
-                  onClick={() => {
-                    handleConnection(0);
-                    setIsRequested(false);
                   }}
                 >
                   Requested

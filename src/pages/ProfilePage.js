@@ -9,6 +9,7 @@ import { getUser } from "../services/AuthService";
 
 import ProfileCard from "../components/Profile/ProfileCard";
 import ProfileItems from "../components/Profile/ProfileItems";
+import Loading from "../components/Loading/Loading";
 
 import ProfileUpload from "../components/Profile/ProfileUpload";
 
@@ -26,8 +27,7 @@ const ProfilePage = () => {
       if (!profile) {
         setSearchParams({ action: "signin" });
       } else {
-        navigate(`/profile/${profile.username}`);
-        window.location.reload();
+        navigate("/");
       }
     }
   }, []);
@@ -63,11 +63,26 @@ const ProfilePage = () => {
         padding: "70px 0px 40px 0px",
       }}
     >
-      <div style={{ width: "100%" }}>
-        <ProfileCard profile={user} isOwner={isOwner} />
-        <ProfileUpload profile={user} isOwner={isOwner} />
-        <ProfileItems profile={user} />
-      </div>
+      {!!user.username ? (
+        <div style={{ width: "100%" }}>
+          <ProfileCard profile={user} isOwner={isOwner} />
+          <ProfileUpload profile={user} isOwner={isOwner} />
+          <ProfileItems profile={user} />
+        </div>
+      ) : (
+        <div
+          style={{
+            position: "fixed",
+            top: "0",
+            right: "0",
+            bottom: "0",
+            left: "0",
+            display: "flex",
+          }}
+        >
+          <Loading />
+        </div>
+      )}
       <br />
     </div>
   );

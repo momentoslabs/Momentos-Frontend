@@ -15,6 +15,7 @@ const ConnectionsViewport = ({
   const [searchVisible, setSearchVisible] = useState(false);
   const [user, setUser] = useState({});
   const [searchedUsername, setSearchedUsername] = useState("");
+  const [oldSearchedUsername, setOldSearchedUsername] = useState("old");
   const [results, setResults] = useState([]);
 
   const requestConfig = {
@@ -40,10 +41,10 @@ const ConnectionsViewport = ({
     getUser();
   }, []);
 
-  const submitHandler = (event) => {
+  const submitHandler = async (event) => {
     event.preventDefault();
 
-    axios
+    await axios
       .get(
         `${process.env.REACT_APP_USERS_API_URL}/users/${searchedUsername}`,
         requestConfig
@@ -54,6 +55,8 @@ const ConnectionsViewport = ({
       .catch((error) => {
         // console.log(error);
       });
+
+    setOldSearchedUsername(searchedUsername);
   };
 
   return (
@@ -173,11 +176,19 @@ const ConnectionsViewport = ({
                         type="image"
                         src={search}
                         width="24px"
+                        onClick={() => {
+                          console.log("rrr");
+                        }}
                       />
                     </form>
-                    {results.map((result, index) => (
-                      <ProfileChip key={index} profile={user} id={result.id} />
-                    ))}
+                    {searchedUsername === oldSearchedUsername &&
+                      results.map((result, index) => (
+                        <ProfileChip
+                          key={index}
+                          profile={user}
+                          id={result.id}
+                        />
+                      ))}
                   </div>
                 )}
               </div>

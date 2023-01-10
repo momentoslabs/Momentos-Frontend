@@ -4,13 +4,13 @@ import React from "react";
 
 import loading from "../../graphics/icons/loading.gif";
 
-const Loading = ({ width = "50px" }) => {
+const Loading = ({ width = 200 }) => {
   return (
-    <div>
+    <div style={{ width: "100%", margin: "auto" }}>
       <img
         style={{
-          padding: "10px",
           width: `${width}px`,
+          height: "80px",
         }}
         src={loading}
       />

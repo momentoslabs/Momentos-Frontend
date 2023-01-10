@@ -34,11 +34,15 @@ const MomentosChip = ({ id = {} }) => {
 
   return (
     <div>
-      <img
-        className="itembox"
-        onClick={() => setMomentoVisible(true)}
-        src={item.image}
-      />
+      {item.image ? (
+        <img
+          className="itembox"
+          onClick={() => setMomentoVisible(true)}
+          src={item.image}
+        />
+      ) : (
+        <div className="itembox" />
+      )}
       {momentoVisible && (
         <MomentoViewport data={item} setMomentoVisible={setMomentoVisible} />
       )}

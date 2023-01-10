@@ -66,8 +66,7 @@ code {
 }
 
 .itembox {
-  background-color: #f7f7f7;
-  color:#ffffff;
+  background-color: #ddd;
   font-size: 48px;
   border-radius: 10px;
   border: #f7f7f7 solid 1px;

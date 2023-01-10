@@ -32,8 +32,8 @@ const MomentosList = ({ profile = {}, items = {} }) => {
                 <h1>It's pretty quiet around here...</h1>
                 {!!profile ? (
                   <p>
-                    Start connecting with others to see your Momentos feed come
-                    to life!
+                    Connect with more people to see your Momentos feed come to
+                    life!
                   </p>
                 ) : (
                   <p>

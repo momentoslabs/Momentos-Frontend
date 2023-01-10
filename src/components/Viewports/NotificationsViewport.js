@@ -73,7 +73,7 @@ const NotificationsViewport = ({
               &#10005;
             </div>
             <h1>Notifications</h1>
-            {!!requests ? (
+            {!!requests.length > 0 ? (
               <div
                 style={{
                   justifyContent: "space-around",
@@ -93,7 +93,7 @@ const NotificationsViewport = ({
                 ))}
               </div>
             ) : (
-              <Loading />
+              <div>Looks like that's it! 📭</div>
             )}
           </div>
         </div>
