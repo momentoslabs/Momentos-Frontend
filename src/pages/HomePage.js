@@ -55,10 +55,10 @@ const HomePage = ({}) => {
                 requestConfig
               )
               .then((response) => {
-                itemIds = [...response.data.items, ...itemIds];
+                itemIds = [...response.data.lastthree, ...itemIds];
               })
               .catch((err) => {
-                console.log(err);
+                // console.log(err);
               });
           }
           return itemIds.sort();
@@ -75,7 +75,7 @@ const HomePage = ({}) => {
                 items = [response.data, ...items];
               })
               .catch((err) => {
-                console.log(err);
+                // console.log(err);
               });
           }
           return items;
@@ -106,7 +106,7 @@ const HomePage = ({}) => {
             setMomentoVisible(true);
           })
           .catch((err) => {
-            console.log(err);
+            // console.log(err);
           });
       };
       getMomento(id);
@@ -129,10 +129,10 @@ const HomePage = ({}) => {
       {momentoVisible && (
         <MomentoViewport data={momento} setMomentoVisible={setMomentoVisible} />
       )}
-      {items.length > 0 && (
+      {!!items && (
         <div>
           <div style={{ margin: "auto" }}>
-            <MomentosList items={items} />
+            <MomentosList profile={profile} items={items} />
           </div>
         </div>
       )}

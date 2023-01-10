@@ -12,7 +12,6 @@ const EditViewport = ({ profile = {}, setEditVisible }) => {
 
   const submitHandler = (event) => {
     event.preventDefault();
-    console.log(profile.id);
     const requestConfig = {
       headers: {
         "x-api-key": process.env.REACT_APP_API_KEY,
@@ -37,7 +36,7 @@ const EditViewport = ({ profile = {}, setEditVisible }) => {
         window.location.reload();
       })
       .catch((error) => {
-        console.log(error);
+        // console.log(error);
       });
   };
 

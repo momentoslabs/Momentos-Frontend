@@ -80,6 +80,14 @@ const App = () => {
               </PrivateRoute>
             }
           />
+          <Route
+            path=""
+            element={
+              <PrivateRoute>
+                <ProfilePage dimensions={dimensions} />
+              </PrivateRoute>
+            }
+          />
         </Route>
         <Route path="*" element={<UnknownPage />} />
       </Routes>

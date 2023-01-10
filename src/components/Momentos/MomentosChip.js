@@ -26,7 +26,7 @@ const MomentosChip = ({ id = {} }) => {
           setItem(response.data);
         })
         .catch((err) => {
-          console.log(err);
+          // console.log(err);
         });
     };
     getItem();

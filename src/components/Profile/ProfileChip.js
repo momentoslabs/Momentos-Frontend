@@ -27,16 +27,18 @@ const ProfileChip = ({ profile = {}, id = {}, requesting = false }) => {
         )
         .then((response) => {
           setUser(response.data);
-          setMode(
-            !(response.data.id in profile.connections)
-              ? 0
-              : profile.connections[response.data.id]
-              ? 2
-              : 1
-          );
+          response.data.id === profile.id
+            ? setMode(-1)
+            : setMode(
+                !(response.data.id in profile.connections)
+                  ? 0
+                  : profile.connections[response.data.id]
+                  ? 2
+                  : 1
+              );
         })
         .catch((err) => {
-          console.log(err);
+          // console.log(err);
         });
     };
     getUser();
@@ -90,7 +92,6 @@ const ProfileChip = ({ profile = {}, id = {}, requesting = false }) => {
         isapproved: action === 2,
         profileid: Number(profile.id),
       };
-      console.log(requestBody2);
 
       axios
         .post(
@@ -206,41 +207,37 @@ const ProfileChip = ({ profile = {}, id = {}, requesting = false }) => {
                   Connect
                 </button>
               )}
-              {mode === 2 &&
-                !!profile.connections[user.id] &&
-                profile.connections[user.id] && (
-                  <button
-                    className="connectbutton active"
-                    style={{
-                      height: "22px",
-                      margin: "-2px 0px",
-                      width: "100px",
-                    }}
-                    onClick={() => {
-                      handleConnection(0);
-                    }}
-                  >
-                    Connected
-                  </button>
-                )}
-              {mode === 1 &&
-                !!profile.connections[user.id] &&
-                !profile.connections[user.id] && (
-                  <button
-                    className="connectbutton active"
-                    style={{
-                      height: "22px",
-                      margin: "-2px 0px",
-                      width: "100px",
-                    }}
-                    onClick={() => {
-                      handleConnection(0);
-                      setIsRequested(false);
-                    }}
-                  >
-                    Requested
-                  </button>
-                )}
+              {mode === 2 && profile.connections[user.id] && (
+                <button
+                  className="connectbutton active"
+                  style={{
+                    height: "22px",
+                    margin: "-2px 0px",
+                    width: "100px",
+                  }}
+                  onClick={() => {
+                    handleConnection(0);
+                  }}
+                >
+                  Connected
+                </button>
+              )}
+              {mode === 1 && !profile.connections[user.id] && (
+                <button
+                  className="connectbutton active"
+                  style={{
+                    height: "22px",
+                    margin: "-2px 0px",
+                    width: "100px",
+                  }}
+                  onClick={() => {
+                    handleConnection(0);
+                    setIsRequested(false);
+                  }}
+                >
+                  Requested
+                </button>
+              )}
 
               {isRequested && (
                 <button

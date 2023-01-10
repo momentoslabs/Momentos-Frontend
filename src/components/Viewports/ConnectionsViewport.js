@@ -32,10 +32,9 @@ const ConnectionsViewport = ({
         )
         .then((response) => {
           setUser(response.data);
-          console.log(response.data);
         })
         .catch((err) => {
-          console.log(err);
+          // console.log(err);
         });
     };
     getUser();
@@ -50,11 +49,10 @@ const ConnectionsViewport = ({
         requestConfig
       )
       .then((response) => {
-        console.log(response.data);
         setResults([response.data]);
       })
       .catch((error) => {
-        console.log(error);
+        // console.log(error);
       });
   };
 

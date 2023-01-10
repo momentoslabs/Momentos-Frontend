@@ -4,13 +4,7 @@ import React from "react";
 
 import MomentosCard from "./MomentosCard";
 
-const MomentosList = ({ items = {} }) => {
-  const requestConfig = {
-    headers: {
-      "x-api-key": process.env.REACT_APP_API_KEY,
-    },
-  };
-
+const MomentosList = ({ profile = {}, items = {} }) => {
   return (
     <div
       style={{
@@ -18,13 +12,40 @@ const MomentosList = ({ items = {} }) => {
         margin: "auto",
       }}
     >
-      <div>
+      {!!items && (
         <div>
-          {items.map((item, index) => (
-            <MomentosCard key={index} data={item} />
-          ))}
+          {items.length > 0 ? (
+            <div>
+              {items.map((item, index) => (
+                <MomentosCard key={index} data={item} />
+              ))}
+            </div>
+          ) : (
+            <div
+              style={{
+                position: "absolute",
+                top: "30%",
+                width: "100%",
+              }}
+            >
+              <div style={{ margin: "auto", width: "80%" }}>
+                <h1>It's pretty quiet around here...</h1>
+                {!!profile ? (
+                  <p>
+                    Start connecting with others to see your Momentos feed come
+                    to life!
+                  </p>
+                ) : (
+                  <p>
+                    Sign in to start creating your own personalized feed of
+                    Momentos!
+                  </p>
+                )}
+              </div>
+            </div>
+          )}
         </div>
-      </div>
+      )}
     </div>
   );
 };

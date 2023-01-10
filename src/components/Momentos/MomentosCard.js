@@ -28,7 +28,7 @@ const MomentosCard = ({ data = {} }) => {
           setUser(response.data);
         })
         .catch((err) => {
-          console.log(err);
+          // console.log(err);
         });
     };
     getUser();

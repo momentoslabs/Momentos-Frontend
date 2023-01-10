@@ -34,10 +34,9 @@ const Header = ({}) => {
         )
         .then((response) => {
           setRequests(response.data.requests);
-          console.log(response.data);
         })
         .catch((err) => {
-          console.log(err);
+          // console.log(err);
         });
     };
     getRequests();

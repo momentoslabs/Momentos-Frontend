@@ -3,6 +3,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
+
 import { getUser } from "../services/AuthService";
 
 import ProfileCard from "../components/Profile/ProfileCard";
@@ -14,7 +16,22 @@ const ProfilePage = () => {
   const profile = getUser();
   const [user, setUser] = useState({});
 
+  const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
+
   const { username } = useParams();
+  console.log(username);
+  useEffect(() => {
+    if (!username) {
+      if (!profile) {
+        setSearchParams({ action: "signin" });
+      } else {
+        navigate(`/profile/${profile.username}`);
+        window.location.reload();
+      }
+    }
+  }, []);
+
   const isOwner = profile.username === username;
 
   const requestConfig = {
@@ -34,7 +51,7 @@ const ProfilePage = () => {
           setUser(response.data);
         })
         .catch((err) => {
-          console.log(err);
+          // console.log(err);
         });
     };
     getUser();

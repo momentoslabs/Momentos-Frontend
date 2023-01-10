@@ -23,7 +23,6 @@ const SignupViewport = ({ children, setSignupVisible }) => {
     /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$&()-`.+,/\"])([a-zA-Z0-9]{8,})$/;
 
   const submitHandler = (event) => {
-    console.log(username.trim());
     event.preventDefault();
     if (
       username.trim() === "" ||

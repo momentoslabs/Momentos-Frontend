@@ -1,7 +1,7 @@
 "use es6";
 
 import React from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 
 import { getUser } from "../../services/AuthService";
 
@@ -13,6 +13,7 @@ const Navbar = ({}) => {
 
   const location = useLocation();
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   return (
     <div
@@ -46,7 +47,9 @@ const Navbar = ({}) => {
         </div>
         <div
           onClick={() => {
-            navigate(`/profile/${profile.username}`);
+            !!profile
+              ? navigate(`/profile/${profile.username}`)
+              : setSearchParams({ action: "signin" });
             window.location.reload();
           }}
         >
