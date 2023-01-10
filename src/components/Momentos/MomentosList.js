@@ -31,17 +31,10 @@ const MomentosList = ({ profile = {}, items = {} }) => {
             >
               <div style={{ margin: "auto", width: "80%" }}>
                 <h1>It's pretty quiet around here...</h1>
-                {!!profile ? (
-                  <p>
-                    Connect with more people to see your Momentos feed come to
-                    life!
-                  </p>
-                ) : (
-                  <p>
-                    Sign in to start creating your own personalized feed of
-                    Momentos!
-                  </p>
-                )}
+                <p>
+                  Connect with more people to see your Momentos feed come to
+                  life!
+                </p>
               </div>
             </div>
           )}
@@ -57,7 +50,17 @@ const MomentosList = ({ profile = {}, items = {} }) => {
             display: "flex",
           }}
         >
-          <Loading />
+          {!!profile ? (
+            <Loading />
+          ) : (
+            <div style={{ margin: "auto", width: "80%" }}>
+              <h1>It's pretty quiet around here...</h1>
+              <p>
+                Sign in to start creating your own personalized feed of
+                Momentos!
+              </p>
+            </div>
+          )}
         </div>
       )}
     </div>
