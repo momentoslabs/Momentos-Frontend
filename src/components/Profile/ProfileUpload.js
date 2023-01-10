@@ -15,6 +15,7 @@ import snap from "../../graphics/icons/snap.png";
 import back from "../../graphics/icons/back.png";
 import rotate from "../../graphics/icons/rotate.png";
 import upload from "../../graphics/icons/upload.png";
+import image2 from "../../graphics/images/image.jpeg";
 
 const ProfileUpload = ({ profile = {}, isOwner = false }) => {
   const uploadActive = Date.now() - profile.lastactive >= 86400000;
@@ -32,8 +33,6 @@ const ProfileUpload = ({ profile = {}, isOwner = false }) => {
   const navigate = useNavigate();
 
   const videoConstraints = {
-    width: dimensions.width,
-    height: dimensions.height,
     facingMode: frontCameraActive ? "user" : { exact: "environment" },
   };
 
@@ -157,12 +156,12 @@ const ProfileUpload = ({ profile = {}, isOwner = false }) => {
                         bottom: "0",
                         left: "0",
                         display: "flex",
+                        height: "100%",
+                        margin: "auto",
                       }}
                       audio={false}
                       mirrored={frontCameraActive ? true : false}
                       ref={webcamRef}
-                      width="100%"
-                      height="100%"
                       screenshotFormat="image/jpeg"
                       videoConstraints={videoConstraints}
                     />
