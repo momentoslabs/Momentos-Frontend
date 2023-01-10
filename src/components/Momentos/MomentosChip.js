@@ -1,5 +1,8 @@
+"use es6";
+
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+
 import MomentoViewport from "../Viewports/MomentoViewport";
 
 const MomentosChip = ({ id = {} }) => {

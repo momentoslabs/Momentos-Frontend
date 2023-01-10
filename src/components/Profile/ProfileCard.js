@@ -1,11 +1,13 @@
-import React, { useState, useEffect } from "react";
-import { useWindowDimensions } from "../../utils/CustomHooks";
+"use es6";
 
-import edit from "../../graphics/icons/edit.png";
+import React, { useState } from "react";
+
 import EditViewport from "../Viewports/EditViewport";
 import ConnectionsViewport from "../Viewports/ConnectionsViewport";
 
-const ProfileCard = ({ profile = {} }) => {
+import edit from "../../graphics/icons/edit.png";
+
+const ProfileCard = ({ profile = {}, isOwner = false }) => {
   const [editVisible, setEditVisible] = useState(false);
   const [connectionsVisible, setConnectionsVisible] = useState(false);
 
@@ -60,17 +62,19 @@ const ProfileCard = ({ profile = {} }) => {
           >
             {profile.name}
           </h2>
-          <img
-            className="highlightable"
-            style={{
-              position: "relative",
-              top: "-10px",
-              height: "24px",
-              margin: "5px",
-            }}
-            onClick={() => setEditVisible(true)}
-            src={edit}
-          />
+          {isOwner && (
+            <img
+              className="highlightable"
+              style={{
+                position: "relative",
+                top: "-10px",
+                height: "24px",
+                margin: "5px",
+              }}
+              onClick={() => setEditVisible(true)}
+              src={edit}
+            />
+          )}
         </div>
         {!!profile.connections && (
           <div
@@ -82,7 +86,14 @@ const ProfileCard = ({ profile = {} }) => {
             }}
             onClick={() => setConnectionsVisible(true)}
           >
-            {Object.keys(profile.connections).length} connections
+            {
+              Object.keys(profile.connections)
+                .filter((boolean) => {
+                  return profile.connections[boolean];
+                })
+                .map(Boolean).length
+            }{" "}
+            connections
           </div>
         )}
         {editVisible && (
@@ -91,6 +102,7 @@ const ProfileCard = ({ profile = {} }) => {
         {connectionsVisible && (
           <ConnectionsViewport
             profile={profile}
+            isOwner={isOwner}
             setConnectionsVisible={setConnectionsVisible}
           />
         )}

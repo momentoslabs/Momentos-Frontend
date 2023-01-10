@@ -1,14 +1,18 @@
+"use es6";
+
 import React from "react";
-import { Link, useLocation } from "react-router-dom";
-import { useWindowDimensions } from "../../utils/CustomHooks";
-import { DESKTOP_MIN } from "../../utils/Constants";
+import { useLocation, useNavigate } from "react-router-dom";
+
+import { getUser } from "../../services/AuthService";
 
 import momentos_white from "../../graphics/icons/momentos_white.png";
-import profile from "../../graphics/icons/profile.png";
+import profile_icon from "../../graphics/icons/profile.png";
 
 const Navbar = ({}) => {
+  const profile = getUser();
+
   const location = useLocation();
-  const dimensions = useWindowDimensions();
+  const navigate = useNavigate();
 
   return (
     <div
@@ -25,30 +29,36 @@ const Navbar = ({}) => {
           maxWidth: "500px",
         }}
       >
-        <div>
-          <Link to="/">
-            <img
-              style={{
-                width: "24px",
-                opacity: location.pathname.length < 4 ? "100%" : "40%",
-              }}
-              src={momentos_white}
-              alt="momentos icon"
-            />
-          </Link>
+        <div
+          onClick={() => {
+            navigate("/");
+            window.location.reload();
+          }}
+        >
+          <img
+            style={{
+              width: "24px",
+              opacity: location.pathname.length < 4 ? "100%" : "40%",
+            }}
+            src={momentos_white}
+            alt="momentos icon"
+          />
         </div>
-        <div>
-          <Link to="/profile">
-            <img
-              style={{
-                width: "24px",
-                opacity:
-                  location.pathname.indexOf("profile") !== -1 ? "100%" : "40%",
-              }}
-              src={profile}
-              alt="profile icon"
-            />
-          </Link>
+        <div
+          onClick={() => {
+            navigate(`/profile/${profile.username}`);
+            window.location.reload();
+          }}
+        >
+          <img
+            style={{
+              width: "24px",
+              opacity:
+                location.pathname.indexOf("profile") !== -1 ? "100%" : "40%",
+            }}
+            src={profile_icon}
+            alt="profile icon"
+          />
         </div>
       </div>
     </div>

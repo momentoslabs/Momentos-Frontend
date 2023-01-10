@@ -1,3 +1,5 @@
+"use es6";
+
 import React from "react";
 
 import loading from "../../graphics/icons/loading.gif";

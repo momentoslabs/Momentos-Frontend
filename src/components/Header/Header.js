@@ -1,5 +1,9 @@
-import React, { useState } from "react";
-import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
+"use es6";
+
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { useNavigate, useSearchParams } from "react-router-dom";
+
 import { getUser, resetUserSession } from "../../services/AuthService";
 
 import momentos_black from "../../graphics/icons/momentos_black.png";
@@ -7,20 +11,37 @@ import notifications from "../../graphics/icons/notifications.png";
 import NotificationsViewport from "../Viewports/NotificationsViewport";
 
 const Header = ({}) => {
-  const location = useLocation();
   const navigate = useNavigate();
 
   const [searchParams, setSearchParams] = useSearchParams();
   const [notificationsVisible, setNotificationsVisible] = useState(false);
+  const [requests, setRequests] = useState([]);
 
   const profile = getUser();
 
-  const formattedParams = (params) => {
-    return String(params).substring(1) === ""
-      ? "Momentos"
-      : String(params).substring(1, 2).toUpperCase() +
-          String(params).substring(2).replace("=", "");
+  const requestConfig = {
+    headers: {
+      "x-api-key": process.env.REACT_APP_API_KEY,
+    },
   };
+
+  useEffect(() => {
+    const getRequests = async () => {
+      await axios
+        .get(
+          `${process.env.REACT_APP_LIBRARYS_API_URL}/librarys/${profile.id}`,
+          requestConfig
+        )
+        .then((response) => {
+          setRequests(response.data.requests);
+          console.log(response.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+    getRequests();
+  }, []);
 
   const signoutHandler = () => {
     resetUserSession();
@@ -50,9 +71,13 @@ const Header = ({}) => {
           justifyContent: "space-between",
         }}
       >
-        <div>
+        <div
+          className="highlightable"
+          onClick={() => {
+            navigate("/");
+          }}
+        >
           <img
-            className="highlightable"
             style={{
               position: "relative",
               top: "6px",
@@ -60,11 +85,8 @@ const Header = ({}) => {
               height: "32px",
             }}
             src={momentos_black}
-            onClick={() => {
-              navigate("/");
-            }}
           />
-          {formattedParams(location.pathname)}
+          Momentos
         </div>
 
         {!!profile ? (
@@ -85,9 +107,29 @@ const Header = ({}) => {
               onClick={() => setNotificationsVisible(true)}
               src={notifications}
             />
+            {!!requests && JSON.stringify(Object.keys(requests).length) > 0 && (
+              <div
+                style={{
+                  position: "absolute",
+                  padding: "2px",
+                  left: "36px",
+                  minWidth: "14px",
+                  maxWidth: "fit-content",
+                  fontSize: "12px",
+                  fontWeight: "bold",
+                  color: "#ffffff",
+                  backgroundColor: "#ff0000",
+                  borderRadius: "20px",
+                }}
+              >
+                {JSON.stringify(Object.keys(requests).length) > 99
+                  ? "99+"
+                  : JSON.stringify(Object.keys(requests).length)}
+              </div>
+            )}
             <button
               className="uploadbutton"
-              style={{ width: "80px", margin: "auto" }}
+              style={{ width: "100px", margin: "auto" }}
               onClick={() => {
                 signoutHandler();
               }}
@@ -98,7 +140,7 @@ const Header = ({}) => {
         ) : (
           <button
             className="uploadbutton"
-            style={{ width: "80px", margin: "auto 0px auto auto" }}
+            style={{ width: "100px", margin: "auto 0px auto auto" }}
             onClick={() => {
               setSearchParams({ action: "signin" });
             }}
@@ -110,6 +152,7 @@ const Header = ({}) => {
       {notificationsVisible && (
         <NotificationsViewport
           profile={profile}
+          requests={requests}
           setNotificationsVisible={setNotificationsVisible}
         />
       )}

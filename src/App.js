@@ -1,4 +1,5 @@
-import logo from "./logo.svg";
+"use es6";
+
 import "./App.css";
 import React, { useState, useEffect } from "react";
 
@@ -70,14 +71,16 @@ const App = () => {
       <Header />
       <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route
-          path="/profile"
-          element={
-            <PrivateRoute>
-              <ProfilePage dimensions={dimensions} />
-            </PrivateRoute>
-          }
-        />
+        <Route path="/profile">
+          <Route
+            path=":username"
+            element={
+              <PrivateRoute>
+                <ProfilePage dimensions={dimensions} />
+              </PrivateRoute>
+            }
+          />
+        </Route>
         <Route path="*" element={<UnknownPage />} />
       </Routes>
       <Navbar />

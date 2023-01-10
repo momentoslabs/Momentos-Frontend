@@ -1,12 +1,17 @@
+"use es6";
+
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import { useWindowDimensions } from "../../utils/CustomHooks";
+
 import ProfileChip from "../Profile/ProfileChip";
 
 import search from "../../graphics/icons/search.png";
 
-const ConnectionsViewport = ({ profile = {}, setConnectionsVisible }) => {
+const ConnectionsViewport = ({
+  profile = {},
+  isOwner = {},
+  setConnectionsVisible,
+}) => {
   const [searchVisible, setSearchVisible] = useState(false);
   const [user, setUser] = useState({});
   const [searchedUsername, setSearchedUsername] = useState("");
@@ -108,13 +113,17 @@ const ConnectionsViewport = ({ profile = {}, setConnectionsVisible }) => {
               >
                 Connections
               </p>
-              <p
-                className="highlightable"
-                style={{ textDecoration: searchVisible ? "underline" : "none" }}
-                onClick={() => setSearchVisible(true)}
-              >
-                Search
-              </p>
+              {isOwner && (
+                <p
+                  className="highlightable"
+                  style={{
+                    textDecoration: searchVisible ? "underline" : "none",
+                  }}
+                  onClick={() => setSearchVisible(true)}
+                >
+                  Search
+                </p>
+              )}
             </div>
             <br />
             {!!user.connections && (
@@ -125,7 +134,11 @@ const ConnectionsViewport = ({ profile = {}, setConnectionsVisible }) => {
                       <div>
                         {Object.keys(user.connections).map(
                           (connection, index) => (
-                            <ProfileChip profile={user} id={connection} />
+                            <ProfileChip
+                              key={index}
+                              profile={user}
+                              id={connection}
+                            />
                           )
                         )}
                       </div>
@@ -165,7 +178,7 @@ const ConnectionsViewport = ({ profile = {}, setConnectionsVisible }) => {
                       />
                     </form>
                     {results.map((result, index) => (
-                      <ProfileChip profile={user} id={result.id} />
+                      <ProfileChip key={index} profile={user} id={result.id} />
                     ))}
                   </div>
                 )}

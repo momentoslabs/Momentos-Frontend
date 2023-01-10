@@ -1,5 +1,7 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+"use es6";
+
+import React from "react";
+
 import MomentosChip from "../Momentos/MomentosChip";
 
 const ProfileItems = ({ profile = {} }) => {
@@ -10,7 +12,6 @@ const ProfileItems = ({ profile = {} }) => {
         margin: "auto",
       }}
     >
-      {console.log(profile.items)}
       <div
         style={{
           display: "flex",
@@ -21,7 +22,9 @@ const ProfileItems = ({ profile = {} }) => {
         }}
       >
         {!!profile.items &&
-          profile.items.map((item, index) => <MomentosChip id={item} />)}
+          profile.items.map((item, index) => (
+            <MomentosChip key={index} id={item} />
+          ))}
       </div>
     </div>
   );

@@ -1,4 +1,6 @@
-import React, { useState, useRef, useEffect } from "react";
+"use es6";
+
+import React, { useState, useEffect } from "react";
 
 const Timer = ({ endtime = 0 }) => {
   const [timeLeft, setTimeLeft] = useState(endtime - Date.now());

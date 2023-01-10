@@ -1,16 +1,16 @@
+"use es6";
+
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useWindowDimensions } from "../../utils/CustomHooks";
+import { useNavigate } from "react-router-dom";
 
 const ProfileChip = ({ profile = {}, id = {}, requesting = false }) => {
+  const navigate = useNavigate();
+
   const [user, setUser] = useState({});
-  const [mode, setMode] = useState(
-    !(user.id in profile.connections)
-      ? 0
-      : profile.connections[user.id].approved
-      ? 2
-      : 1
-  );
+  const [mode, setMode] = useState(0);
+  const [isVisible, setIsVisible] = useState(true);
+  const [isRequested, setIsRequested] = useState(false);
 
   const requestConfig = {
     headers: {
@@ -30,7 +30,7 @@ const ProfileChip = ({ profile = {}, id = {}, requesting = false }) => {
           setMode(
             !(response.data.id in profile.connections)
               ? 0
-              : profile.connections[response.data.id].approved
+              : profile.connections[response.data.id]
               ? 2
               : 1
           );
@@ -66,7 +66,7 @@ const ProfileChip = ({ profile = {}, id = {}, requesting = false }) => {
     if (action === 1) {
       const requestBody2 = {
         id: Number(user.id),
-        isrequest: true,
+        isconnecting: true,
         isreviewed: false,
         isapproved: false,
         profileid: Number(profile.id),
@@ -85,11 +85,12 @@ const ProfileChip = ({ profile = {}, id = {}, requesting = false }) => {
     } else {
       const requestBody2 = {
         id: Number(user.id),
-        isrequest: true,
+        isconnecting: true,
         isreviewed: true,
         isapproved: action === 2,
         profileid: Number(profile.id),
       };
+      console.log(requestBody2);
 
       axios
         .post(
@@ -101,19 +102,43 @@ const ProfileChip = ({ profile = {}, id = {}, requesting = false }) => {
         .catch((err) => {
           console.log(err);
         });
+
+      if (action === 2) {
+        const requestBody3 = {
+          connections: { id: profile.id, action: 2 },
+        };
+        axios
+          .post(
+            `${process.env.REACT_APP_USERS_API_URL}/users/${user.id}`,
+            requestBody3,
+            requestConfig
+          )
+          .then(() => {
+            // window.location.reload();
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
     }
   };
 
   return (
-    !!user.color && (
+    !!user.color &&
+    isVisible && (
       <div style={{ display: "flex" }}>
         <div
+          className="highlightable"
           style={{
             backgroundColor: `${user.color}`,
             width: "48px",
             height: "48px",
             borderRadius: "50%",
             margin: "8px 10px 0px 0px",
+          }}
+          onClick={() => {
+            navigate(`/profile/${user.username}`);
+            window.location.reload();
           }}
         >
           <div
@@ -140,18 +165,28 @@ const ProfileChip = ({ profile = {}, id = {}, requesting = false }) => {
               <p>Requested to connect.</p>
               <button
                 className="connectbutton"
-                style={{ height: "22px", margin: "-2px 0px", width: "100px" }}
+                style={{
+                  height: "22px",
+                  margin: "-2px 5px 0px 0px",
+                  width: "100px",
+                }}
                 onClick={() => {
                   handleConnection(2);
+                  setIsVisible(false);
                 }}
               >
                 Accept
               </button>
               <button
                 className="connectbutton"
-                style={{ height: "22px", margin: "-2px 0px", width: "100px" }}
+                style={{
+                  height: "22px",
+                  margin: "-2px 0px 0px 5px",
+                  width: "100px",
+                }}
                 onClick={() => {
                   handleConnection(0);
+                  setIsVisible(false);
                 }}
               >
                 Reject
@@ -165,37 +200,59 @@ const ProfileChip = ({ profile = {}, id = {}, requesting = false }) => {
                   style={{ height: "22px", margin: "-2px 0px", width: "100px" }}
                   onClick={() => {
                     handleConnection(1);
+                    setIsRequested(true);
                   }}
                 >
                   Connect
                 </button>
               )}
+              {mode === 2 &&
+                !!profile.connections[user.id] &&
+                profile.connections[user.id] && (
+                  <button
+                    className="connectbutton active"
+                    style={{
+                      height: "22px",
+                      margin: "-2px 0px",
+                      width: "100px",
+                    }}
+                    onClick={() => {
+                      handleConnection(0);
+                    }}
+                  >
+                    Connected
+                  </button>
+                )}
+              {mode === 1 &&
+                !!profile.connections[user.id] &&
+                !profile.connections[user.id] && (
+                  <button
+                    className="connectbutton active"
+                    style={{
+                      height: "22px",
+                      margin: "-2px 0px",
+                      width: "100px",
+                    }}
+                    onClick={() => {
+                      handleConnection(0);
+                      setIsRequested(false);
+                    }}
+                  >
+                    Requested
+                  </button>
+                )}
 
-              {mode === 2 ||
-                (!!profile.connections[user.id] &&
-                  profile.connections[user.id].approved && (
-                    <button
-                      className="connectbutton active"
-                      style={{
-                        height: "22px",
-                        margin: "-2px 0px",
-                        width: "100px",
-                      }}
-                      onClick={() => {
-                        handleConnection(0);
-                      }}
-                    >
-                      Connected
-                    </button>
-                  ))}
-              {(mode === 1 ||
-                (!!profile.connections[user.id] &&
-                  !profile.connections[user.id].approved)) && (
+              {isRequested && (
                 <button
                   className="connectbutton active"
-                  style={{ height: "22px", margin: "-2px 0px", width: "100px" }}
+                  style={{
+                    height: "22px",
+                    margin: "-2px 0px",
+                    width: "100px",
+                  }}
                   onClick={() => {
                     handleConnection(0);
+                    setIsRequested(false);
                   }}
                 >
                   Requested

@@ -1,3 +1,5 @@
+"use es6";
+
 import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { useLocation } from "react-router-dom";
 

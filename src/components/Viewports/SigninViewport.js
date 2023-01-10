@@ -2,8 +2,9 @@
 
 import React, { useState } from "react";
 import axios from "axios";
-import { setUserSession } from "../../services/AuthService";
 import { useNavigate, useSearchParams } from "react-router-dom";
+
+import { setUserSession } from "../../services/AuthService";
 
 const SigninViewport = ({ children, setSigninVisible }) => {
   const navigate = useNavigate();
@@ -40,7 +41,7 @@ const SigninViewport = ({ children, setSigninVisible }) => {
       .then((response) => {
         setUserSession(response.data.user, response.data.token);
         setSigninVisible(false);
-        navigate("/profile");
+        navigate(`/profile/${response.data.user.username}`);
         window.location.reload();
       })
       .catch((error) => {
@@ -86,7 +87,7 @@ const SigninViewport = ({ children, setSigninVisible }) => {
             placeholder="Password"
             maxlength="24"
             onChange={(event) => setPassword(event.target.value)}
-          />{" "}
+          />
           <br />
           <input
             className="textinput"

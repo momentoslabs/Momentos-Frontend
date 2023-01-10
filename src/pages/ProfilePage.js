@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { getUser } from "../services/AuthService";
 
 import ProfileCard from "../components/Profile/ProfileCard";
@@ -14,6 +14,9 @@ const ProfilePage = () => {
   const profile = getUser();
   const [user, setUser] = useState({});
 
+  const { username } = useParams();
+  const isOwner = profile.username === username;
+
   const requestConfig = {
     headers: {
       "x-api-key": process.env.REACT_APP_API_KEY,
@@ -24,7 +27,7 @@ const ProfilePage = () => {
     const getUser = async () => {
       await axios
         .get(
-          `${process.env.REACT_APP_USERS_API_URL}/users/${profile.id}`,
+          `${process.env.REACT_APP_USERS_API_URL}/users/${username}`,
           requestConfig
         )
         .then((response) => {
@@ -44,12 +47,10 @@ const ProfilePage = () => {
       }}
     >
       <div style={{ width: "100%" }}>
-        <ProfileCard profile={user} />
-        <ProfileUpload profile={user} />
+        <ProfileCard profile={user} isOwner={isOwner} />
+        <ProfileUpload profile={user} isOwner={isOwner} />
         <ProfileItems profile={user} />
       </div>
-
-      <br />
       <br />
     </div>
   );

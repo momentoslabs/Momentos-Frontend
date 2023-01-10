@@ -1,7 +1,7 @@
+"use es6";
+
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import { useWindowDimensions } from "../../utils/CustomHooks";
 
 const EditViewport = ({ profile = {}, setEditVisible }) => {
   const [username, setUsername] = useState("");
@@ -9,8 +9,6 @@ const EditViewport = ({ profile = {}, setEditVisible }) => {
   const [email, setEmail] = useState("");
   const [color, setColor] = useState("");
   const [emoji, setEmoji] = useState("");
-
-  const navigate = useNavigate();
 
   const submitHandler = (event) => {
     event.preventDefault();
@@ -121,7 +119,7 @@ const EditViewport = ({ profile = {}, setEditVisible }) => {
                   onChange={(event) => {
                     setColor(event.target.value);
                   }}
-                />{" "}
+                />
               </div>
               <input
                 className="textinput"

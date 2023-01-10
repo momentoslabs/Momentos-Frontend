@@ -1,3 +1,5 @@
+"use es6";
+
 export const addCachedData = (cacheName, request, response) => {
   const data = new Response(JSON.stringify(response));
 

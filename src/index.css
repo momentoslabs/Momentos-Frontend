@@ -169,6 +169,6 @@ code {
   opacity: 100%;
 }
 
-.active, .highlightable:hover {
+.highlightable:hover {
   opacity: 50%;
 }

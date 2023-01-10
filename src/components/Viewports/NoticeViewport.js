@@ -1,10 +1,6 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import { useWindowDimensions } from "../../utils/CustomHooks";
-import ProfileChip from "../Profile/ProfileChip";
+"use es6";
 
-import search from "../../graphics/icons/search.png";
+import React from "react";
 
 const NoticeViewport = ({ setNoticeVisible, message }) => {
   return (

@@ -2,8 +2,9 @@
 
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { setUserSession } from "../../services/AuthService";
 import { useNavigate, useSearchParams } from "react-router-dom";
+
+import { setUserSession } from "../../services/AuthService";
 
 const SignupViewport = ({ children, setSignupVisible }) => {
   const navigate = useNavigate();
@@ -60,7 +61,7 @@ const SignupViewport = ({ children, setSignupVisible }) => {
         setMessage("Welcome!");
         setUserSession(response.data.user, response.data.token);
         setSignupVisible(false);
-        navigate("/profile");
+        navigate(`/profile/${response.data.user.username}`);
         window.location.reload();
       })
       .catch((error) => {

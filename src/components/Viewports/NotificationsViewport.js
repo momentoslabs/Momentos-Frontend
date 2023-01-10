@@ -1,15 +1,17 @@
+"use es6";
+
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import { useWindowDimensions } from "../../utils/CustomHooks";
-import ProfileChip from "../Profile/ProfileChip";
 
-import loading from "../../graphics/icons/loading.gif";
+import ProfileChip from "../Profile/ProfileChip";
 import Loading from "../Loading/Loading";
 
-const NotificationsViewport = ({ profile = {}, setNotificationsVisible }) => {
+const NotificationsViewport = ({
+  profile = {},
+  requests = {},
+  setNotificationsVisible,
+}) => {
   const [user, setUser] = useState({});
-  const [requests, setRequests] = useState([]);
 
   const requestConfig = {
     headers: {
@@ -33,22 +35,6 @@ const NotificationsViewport = ({ profile = {}, setNotificationsVisible }) => {
         });
     };
     getUser();
-
-    const getRequests = async () => {
-      await axios
-        .get(
-          `${process.env.REACT_APP_LIBRARYS_API_URL}/librarys/${profile.id}`,
-          requestConfig
-        )
-        .then((response) => {
-          setRequests(response.data.requests);
-          console.log(response.data);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    };
-    getRequests();
   }, []);
 
   return (
@@ -82,6 +68,7 @@ const NotificationsViewport = ({ profile = {}, setNotificationsVisible }) => {
               }}
               onClick={() => {
                 setNotificationsVisible(false);
+                window.location.reload();
               }}
             >
               &#10005;
@@ -98,7 +85,12 @@ const NotificationsViewport = ({ profile = {}, setNotificationsVisible }) => {
                 }}
               >
                 {Object.keys(requests).map((request, index) => (
-                  <ProfileChip profile={user} id={request} requesting={true} />
+                  <ProfileChip
+                    key={index}
+                    profile={user}
+                    id={request}
+                    requesting={true}
+                  />
                 ))}
               </div>
             ) : (
