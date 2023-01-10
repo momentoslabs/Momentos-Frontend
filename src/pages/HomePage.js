@@ -14,7 +14,7 @@ import MomentoViewport from "../components/Viewports/MomentoViewport";
 
 const HomePage = ({}) => {
   const profile = getUser();
-  const [items, setItems] = useState([]);
+  const [items, setItems] = useState(false);
 
   const [signupVisible, setSignupVisible] = useState(false);
   const [signinVisible, setSigninVisible] = useState(false);
@@ -129,13 +129,13 @@ const HomePage = ({}) => {
       {momentoVisible && (
         <MomentoViewport data={momento} setMomentoVisible={setMomentoVisible} />
       )}
-      {!!items && (
-        <div>
-          <div style={{ margin: "auto" }}>
-            <MomentosList profile={profile} items={items} />
-          </div>
+
+      <div>
+        <div style={{ margin: "auto" }}>
+          <MomentosList profile={profile} items={items} />
         </div>
-      )}
+      </div>
+
       <br />
     </div>
   );

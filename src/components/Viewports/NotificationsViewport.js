@@ -12,6 +12,7 @@ const NotificationsViewport = ({
   setNotificationsVisible,
 }) => {
   const [user, setUser] = useState({});
+  const [numRequests, setNumRequests] = useState(Object.keys(requests).length);
 
   const requestConfig = {
     headers: {
@@ -35,6 +36,10 @@ const NotificationsViewport = ({
     };
     getUser();
   }, []);
+
+  const updateNumRequests = (count) => {
+    setNumRequests(numRequests + count);
+  };
 
   return (
     <div
@@ -73,12 +78,11 @@ const NotificationsViewport = ({
               &#10005;
             </div>
             <h1>Notifications</h1>
-            {!!requests.length > 0 ? (
+            {numRequests > 0 ? (
               <div
                 style={{
                   justifyContent: "space-around",
                   borderRadius: "25px",
-                  border: "#000000 solid 2px",
                   padding: "10px",
                   height: "fit-content",
                 }}
@@ -89,6 +93,7 @@ const NotificationsViewport = ({
                     profile={user}
                     id={request}
                     requesting={true}
+                    updateNumRequests={updateNumRequests}
                   />
                 ))}
               </div>

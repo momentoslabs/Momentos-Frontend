@@ -10,6 +10,7 @@ const MomentosCard = ({ data = {} }) => {
   const [reactedLaugh, setReactedLaugh] = useState(false);
 
   const [user, setUser] = useState({});
+  const [sharetext, setSharetext] = useState("🔗");
 
   const requestConfig = {
     headers: {
@@ -33,6 +34,13 @@ const MomentosCard = ({ data = {} }) => {
     };
     getUser();
   }, []);
+
+  const shareMomento = async () => {
+    setSharetext("✔️");
+    navigator.clipboard.writeText(`momentos.cc/?momento=${data.id}`);
+    await new Promise((resolve) => setTimeout(resolve, 500));
+    setSharetext("🔗");
+  };
 
   return (
     <div
@@ -67,14 +75,20 @@ const MomentosCard = ({ data = {} }) => {
           >
             {data.description}
           </div>
-          <div style={{ display: "flex" }}>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+            }}
+          >
             <div style={{ display: "flex", flexWrap: "wrap" }}>
               <div
+                className="highlightable"
                 style={{
                   maxWidth: "fit-content",
-                  height: "40px",
+                  height: "35px",
                   margin: "10px 10px 10px 0px",
-                  backgroundColor: "#ddeeff",
+                  backgroundColor: "#ddd",
                   borderRadius: "25px",
                   display: "flex",
                   justifyContent: "center",
@@ -85,11 +99,12 @@ const MomentosCard = ({ data = {} }) => {
                 <div style={{ padding: "5px 15px 5px 5px" }}>{data.likes}</div>
               </div>
               <div
+                className="highlightable"
                 style={{
                   width: "fit-content",
-                  height: "40px",
+                  height: "35px",
                   margin: "10px 10px 10px 0px",
-                  backgroundColor: "#ddeeff",
+                  backgroundColor: "#ddd",
                   borderRadius: "25px",
                   display: "flex",
                   justifyContent: "center",
@@ -100,11 +115,12 @@ const MomentosCard = ({ data = {} }) => {
                 <div style={{ padding: "5px 15px 5px 5px" }}>{data.fires}</div>
               </div>
               <div
+                className="highlightable"
                 style={{
                   width: "fit-content",
-                  height: "40px",
+                  height: "35px",
                   margin: "10px 10px 10px 0px",
-                  backgroundColor: "#ddeeff",
+                  backgroundColor: "#ddd",
                   borderRadius: "25px",
                   display: "flex",
                   justifyContent: "center",
@@ -115,11 +131,12 @@ const MomentosCard = ({ data = {} }) => {
                 <div style={{ padding: "5px 15px 5px 5px" }}>{data.claps}</div>
               </div>
               <div
+                className="highlightable"
                 style={{
                   width: "fit-content",
-                  height: "40px",
+                  height: "35px",
                   margin: "10px 10px 10px 0px",
-                  backgroundColor: "#ddeeff",
+                  backgroundColor: "#ddd",
                   borderRadius: "25px",
                   display: "flex",
                   justifyContent: "center",
@@ -129,6 +146,24 @@ const MomentosCard = ({ data = {} }) => {
                 <div style={{ padding: "5px 0px 5px 15px" }}>😂</div>
                 <div style={{ padding: "5px 15px 5px 5px" }}>{data.laughs}</div>
               </div>
+            </div>
+            <div
+              className="highlightable"
+              style={{
+                width: "fit-content",
+                height: "35px",
+                margin: "10px 0px 10px 10px",
+                backgroundColor: "#ddd",
+                borderRadius: "25px",
+                display: "flex",
+                justifyContent: "center",
+                fontSize: "x-large",
+              }}
+              onClick={() => {
+                shareMomento();
+              }}
+            >
+              <div style={{ padding: "5px 10px 5px 10px" }}>{sharetext}</div>
             </div>
           </div>
         </div>

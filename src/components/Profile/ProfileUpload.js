@@ -77,7 +77,7 @@ const ProfileUpload = ({ profile = {}, isOwner = false }) => {
         requestConfig
       )
       .then(() => {
-        navigate("/profile");
+        navigate(`/profile/${profile.username}`);
         setUploadModalOpen(false);
         allowScroll();
         setImg(null);
@@ -151,8 +151,15 @@ const ProfileUpload = ({ profile = {}, isOwner = false }) => {
                 {img === null ? (
                   <>
                     <Webcam
+                      style={{
+                        top: "0",
+                        right: "0",
+                        bottom: "0",
+                        left: "0",
+                        display: "flex",
+                      }}
                       audio={false}
-                      mirrored={true}
+                      mirrored={frontCameraActive ? true : false}
                       ref={webcamRef}
                       width="100%"
                       height="100%"
@@ -182,9 +189,12 @@ const ProfileUpload = ({ profile = {}, isOwner = false }) => {
                     <img
                       src={img}
                       style={{
-                        position: "relative",
-                        left: "0%",
-                        top: "18%",
+                        position: "fixed",
+                        top: "0",
+                        right: "0",
+                        bottom: "0",
+                        left: "0",
+                        display: "flex",
                       }}
                       alt="snapshot"
                     />

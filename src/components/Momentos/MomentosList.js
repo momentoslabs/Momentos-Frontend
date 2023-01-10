@@ -3,6 +3,7 @@
 import React from "react";
 
 import MomentosCard from "./MomentosCard";
+import Loading from "../Loading/Loading";
 
 const MomentosList = ({ profile = {}, items = {} }) => {
   return (
@@ -12,7 +13,7 @@ const MomentosList = ({ profile = {}, items = {} }) => {
         margin: "auto",
       }}
     >
-      {!!items && (
+      {!!items ? (
         <div>
           {items.length > 0 ? (
             <div>
@@ -44,6 +45,19 @@ const MomentosList = ({ profile = {}, items = {} }) => {
               </div>
             </div>
           )}
+        </div>
+      ) : (
+        <div
+          style={{
+            position: "fixed",
+            top: "0",
+            right: "0",
+            bottom: "0",
+            left: "0",
+            display: "flex",
+          }}
+        >
+          <Loading />
         </div>
       )}
     </div>

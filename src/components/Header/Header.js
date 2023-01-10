@@ -75,6 +75,7 @@ const Header = ({}) => {
           onClick={() => {
             navigate("/");
           }}
+          style={{ fontSize: "28px" }}
         >
           <img
             style={{
@@ -94,6 +95,7 @@ const Header = ({}) => {
               display: "flex",
               position: "relative",
               right: "0px",
+              top: "2px",
             }}
           >
             <img

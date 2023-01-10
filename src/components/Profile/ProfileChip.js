@@ -4,7 +4,12 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-const ProfileChip = ({ profile = {}, id = {}, requesting = false }) => {
+const ProfileChip = ({
+  profile = {},
+  id = {},
+  requesting = false,
+  updateNumRequests = {},
+}) => {
   const navigate = useNavigate();
 
   const [user, setUser] = useState({});
@@ -41,13 +46,10 @@ const ProfileChip = ({ profile = {}, id = {}, requesting = false }) => {
         });
     };
     getUser();
-
-    console.log({ mode });
   }, []);
 
   const handleConnection = (action) => {
     setMode(action);
-    console.log({ mode });
     const requestBody1 = {
       connections: { id: user.id, action: action },
     };
@@ -61,7 +63,7 @@ const ProfileChip = ({ profile = {}, id = {}, requesting = false }) => {
         // window.location.reload();
       })
       .catch((error) => {
-        console.log(error);
+        // console.log(error);
       });
 
     if (action === 1) {
@@ -81,7 +83,7 @@ const ProfileChip = ({ profile = {}, id = {}, requesting = false }) => {
         )
         .then(() => {})
         .catch((err) => {
-          console.log(err);
+          // console.log(err);
         });
     } else {
       const requestBody2 = {
@@ -100,7 +102,7 @@ const ProfileChip = ({ profile = {}, id = {}, requesting = false }) => {
         )
         .then(() => {})
         .catch((err) => {
-          console.log(err);
+          // console.log(err);
         });
 
       if (action === 2) {
@@ -117,7 +119,7 @@ const ProfileChip = ({ profile = {}, id = {}, requesting = false }) => {
             // window.location.reload();
           })
           .catch((error) => {
-            console.log(error);
+            // console.log(error);
           });
       }
     }
@@ -173,6 +175,7 @@ const ProfileChip = ({ profile = {}, id = {}, requesting = false }) => {
                 onClick={() => {
                   handleConnection(2);
                   setIsVisible(false);
+                  updateNumRequests(-1);
                 }}
               >
                 Accept
@@ -187,6 +190,7 @@ const ProfileChip = ({ profile = {}, id = {}, requesting = false }) => {
                 onClick={() => {
                   handleConnection(0);
                   setIsVisible(false);
+                  updateNumRequests(-1);
                 }}
               >
                 Reject
