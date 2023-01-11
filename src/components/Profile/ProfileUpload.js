@@ -145,10 +145,19 @@ const ProfileUpload = ({ profile = {}, isOwner = false }) => {
                   width: "100%",
                   zIndex: "1",
                   justifySelf: "center",
+                  justifyContent: "center",
                 }}
               >
                 {img === null ? (
-                  <>
+                  <div
+                    style={{
+                      position: "fixed",
+                      top: "0",
+                      right: "0",
+                      bottom: "0",
+                      left: "0",
+                    }}
+                  >
                     <Webcam
                       style={{
                         top: "0",
@@ -182,7 +191,7 @@ const ProfileUpload = ({ profile = {}, isOwner = false }) => {
                         <img src={rotate} width="32px" height="32px" />
                       </button>
                     </div>
-                  </>
+                  </div>
                 ) : (
                   <>
                     <img
