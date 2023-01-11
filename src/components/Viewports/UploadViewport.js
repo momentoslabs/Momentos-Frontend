@@ -8,6 +8,8 @@ const UploadViewport = ({
   handleFileInput,
   selectedFile,
   setImg,
+  description,
+  setDescription,
   uploadMomento,
 }) => {
   return (
@@ -16,7 +18,6 @@ const UploadViewport = ({
         position: "absolute",
         top: "100px",
         height: "fit-content",
-        width: "90%",
         margin: "auto",
       }}
     >
@@ -25,7 +26,7 @@ const UploadViewport = ({
           style={{
             backgroundColor: "#ffffff",
             width: "300px",
-            borderRadius: "25px",
+            borderRadius: "10px",
             height: "fit-content",
             padding: "15px",
             margin: "auto",
@@ -38,6 +39,7 @@ const UploadViewport = ({
                 fontSize: "large",
                 textAlign: "left",
                 margin: "5px 0px",
+                height: "0px",
               }}
               onClick={() => {
                 setUploadVisible(false);
@@ -45,13 +47,13 @@ const UploadViewport = ({
             >
               &#10005;
             </div>
-            <h1>Upload Momento</h1>
+            <h1 style={{ height: "15px" }}>Upload Momento</h1>
             <div
               style={{
                 display: "flex",
                 justifyContent: "space-around",
-                borderRadius: "25px",
-                padding: "20px",
+                borderRadius: "10px",
+                padding: "10px",
                 height: "40px",
               }}
             >
@@ -107,7 +109,7 @@ const UploadViewport = ({
             <div
               style={{
                 justifyContent: "space-around",
-                borderRadius: "25px",
+                borderRadius: "10px",
                 border: "#000000 solid 2px",
                 padding: "20px",
               }}
@@ -117,7 +119,23 @@ const UploadViewport = ({
                   <img
                     id="blah"
                     src={URL.createObjectURL(selectedFile) || "#"}
-                    width="100%"
+                    style={{ maxHeight: "300px", maxWidth: "100%" }}
+                  />
+                  <textarea
+                    className="textinput"
+                    style={{
+                      resize: "none",
+                      opacity: "80%",
+                      width: "90%",
+                      margin: "10px auto",
+                    }}
+                    type="description"
+                    value={description}
+                    placeholder="Description of this momento."
+                    maxlength="48"
+                    cols="23"
+                    rows="2"
+                    onChange={(event) => setDescription(event.target.value)}
                   />
                   <button
                     className="textinput"

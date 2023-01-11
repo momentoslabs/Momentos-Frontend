@@ -17,7 +17,7 @@ const MomentoViewport = ({ data = {}, setMomentoVisible }) => {
             style={{
               backgroundColor: "#ffffff",
               width: "300px",
-              borderRadius: "25px",
+              borderRadius: "10px",
               height: "fit-content",
               padding: "15px",
               margin: "auto",
@@ -30,6 +30,7 @@ const MomentoViewport = ({ data = {}, setMomentoVisible }) => {
                   fontSize: "large",
                   textAlign: "left",
                   margin: "5px 0px",
+                  height: "0px",
                 }}
                 onClick={() => {
                   setMomentoVisible(false);

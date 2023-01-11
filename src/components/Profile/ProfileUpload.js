@@ -198,6 +198,8 @@ const ProfileUpload = ({ profile = {}, isOwner = false }) => {
                   handleFileInput={handleFileInput}
                   selectedFile={selectedFile}
                   setImg={setImg}
+                  description={description}
+                  setDescription={setDescription}
                   uploadMomento={uploadMomento}
                 />
               </div>

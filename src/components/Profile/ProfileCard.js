@@ -15,7 +15,6 @@ const ProfileCard = ({ profile = {}, isOwner = false }) => {
     <div
       style={{
         height: "fit-content",
-        width: "90%",
         margin: "auto",
       }}
     >
@@ -36,7 +35,6 @@ const ProfileCard = ({ profile = {}, isOwner = false }) => {
               style={{
                 position: "relative",
                 margin: "auto",
-                top: "6px",
                 fontSize: "64px",
                 height: "fit-content",
               }}

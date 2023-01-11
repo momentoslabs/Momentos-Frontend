@@ -44,9 +44,9 @@ const SignupViewport = ({ children, setSignupVisible }) => {
     const dobInt = new Date(dob);
 
     const requestBody = {
-      username: username,
+      username: username.toLowerCase(),
       name: name,
-      email: email,
+      email: email.toLowerCase(),
       password: password,
       dob: dobInt.getTime(),
     };

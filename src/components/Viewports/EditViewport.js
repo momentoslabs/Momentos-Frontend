@@ -46,7 +46,6 @@ const EditViewport = ({ profile = {}, setEditVisible }) => {
         position: "absolute",
         top: "100px",
         height: "fit-content",
-        width: "90%",
         margin: "auto",
       }}
     >
@@ -55,7 +54,7 @@ const EditViewport = ({ profile = {}, setEditVisible }) => {
           style={{
             backgroundColor: "#ffffff",
             width: "300px",
-            borderRadius: "25px",
+            borderRadius: "10px",
             height: "fit-content",
             padding: "15px",
             margin: "auto",
@@ -68,6 +67,7 @@ const EditViewport = ({ profile = {}, setEditVisible }) => {
                 fontSize: "large",
                 textAlign: "left",
                 margin: "5px 0px",
+                height: "0px",
               }}
               onClick={() => {
                 setEditVisible(false);
@@ -75,7 +75,7 @@ const EditViewport = ({ profile = {}, setEditVisible }) => {
             >
               &#10005;
             </div>
-            <h1>Edit Profile</h1>
+            <h1 style={{ height: "15px" }}>Edit Profile</h1>
             <form
               onSubmit={submitHandler}
               style={{

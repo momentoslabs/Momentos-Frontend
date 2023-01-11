@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const MomentosCard = ({ data = {} }) => {
   const [reactedLike, setReactedLike] = useState(false);
@@ -11,6 +12,8 @@ const MomentosCard = ({ data = {} }) => {
 
   const [user, setUser] = useState({});
   const [sharetext, setSharetext] = useState("🔗");
+
+  const navigate = useNavigate();
 
   const requestConfig = {
     headers: {
@@ -46,25 +49,59 @@ const MomentosCard = ({ data = {} }) => {
     <div
       style={{
         height: "fit-content",
-        width: "90%",
-        height: "fit-content",
         margin: "20px auto",
       }}
     >
       {!!user.username && (
         <div style={{ maxWidth: "500px", margin: "auto" }}>
           <div
-            style={{
-              textAlign: "left",
-              fontSize: "x-large",
-              padding: "10px 0px",
+            className="highlightable"
+            style={{ display: "flex", alignItems: "center", height: "60px" }}
+            onClick={() => {
+              navigate(`/profile/${user.username}`);
+              window.location.reload();
             }}
           >
-            @{user.username}
+            <div
+              style={{
+                backgroundColor: `${user.color}`,
+                width: "36px",
+                height: "36px",
+                borderRadius: "50%",
+                margin: "6px 10px 0px 0px",
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              <div
+                style={{
+                  position: "relative",
+                  margin: "auto",
+                  top: "-1px",
+                  fontSize: "18px",
+                  height: "fit-content",
+                }}
+              >
+                {user.emoji}
+              </div>
+            </div>
+            <h4
+              style={{
+                textAlign: "left",
+                fontSize: "x-large",
+                padding: "0px",
+              }}
+            >
+              @{user.username}
+            </h4>
           </div>
           <img
             src={data.image}
-            style={{ borderRadius: "25px", width: "100%" }}
+            style={{
+              borderRadius: "10px",
+              maxWidth: "100%",
+              maxHeight: "300px",
+            }}
           />
           <div
             style={{
@@ -89,10 +126,11 @@ const MomentosCard = ({ data = {} }) => {
                   height: "35px",
                   margin: "10px 10px 10px 0px",
                   backgroundColor: "#ddd",
-                  borderRadius: "25px",
+                  borderRadius: "10px",
                   display: "flex",
                   justifyContent: "center",
                   fontSize: "x-large",
+                  alignItems: "center",
                 }}
               >
                 <div style={{ padding: "5px 0px 5px 15px" }}>❤️</div>
@@ -105,10 +143,11 @@ const MomentosCard = ({ data = {} }) => {
                   height: "35px",
                   margin: "10px 10px 10px 0px",
                   backgroundColor: "#ddd",
-                  borderRadius: "25px",
+                  borderRadius: "10px",
                   display: "flex",
                   justifyContent: "center",
                   fontSize: "x-large",
+                  alignItems: "center",
                 }}
               >
                 <div style={{ padding: "5px 0px 5px 15px" }}>🔥</div>
@@ -121,10 +160,11 @@ const MomentosCard = ({ data = {} }) => {
                   height: "35px",
                   margin: "10px 10px 10px 0px",
                   backgroundColor: "#ddd",
-                  borderRadius: "25px",
+                  borderRadius: "10px",
                   display: "flex",
                   justifyContent: "center",
                   fontSize: "x-large",
+                  alignItems: "center",
                 }}
               >
                 <div style={{ padding: "5px 0px 5px 15px" }}>👏</div>
@@ -137,10 +177,11 @@ const MomentosCard = ({ data = {} }) => {
                   height: "35px",
                   margin: "10px 10px 10px 0px",
                   backgroundColor: "#ddd",
-                  borderRadius: "25px",
+                  borderRadius: "10px",
                   display: "flex",
                   justifyContent: "center",
                   fontSize: "x-large",
+                  alignItems: "center",
                 }}
               >
                 <div style={{ padding: "5px 0px 5px 15px" }}>😂</div>
@@ -154,10 +195,11 @@ const MomentosCard = ({ data = {} }) => {
                 height: "35px",
                 margin: "10px 0px 10px 10px",
                 backgroundColor: "#ddd",
-                borderRadius: "25px",
+                borderRadius: "10px",
                 display: "flex",
                 justifyContent: "center",
                 fontSize: "x-large",
+                alignItems: "center",
               }}
               onClick={() => {
                 shareMomento();

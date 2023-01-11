@@ -65,7 +65,6 @@ const ConnectionsViewport = ({
         position: "absolute",
         top: "100px",
         height: "fit-content",
-        width: "90%",
         margin: "auto",
       }}
     >
@@ -74,7 +73,7 @@ const ConnectionsViewport = ({
           style={{
             backgroundColor: "#ffffff",
             width: "300px",
-            borderRadius: "25px",
+            borderRadius: "10px",
             height: "fit-content",
             padding: "15px",
             margin: "auto",
@@ -87,6 +86,7 @@ const ConnectionsViewport = ({
                 fontSize: "large",
                 textAlign: "left",
                 margin: "5px 0px",
+                height: "0px",
               }}
               onClick={() => {
                 setConnectionsVisible(false);
@@ -95,13 +95,13 @@ const ConnectionsViewport = ({
             >
               &#10005;
             </div>
-            <h1>Connections</h1>
+            <h1 style={{ height: "15px" }}>Connections</h1>
             <div
               style={{
                 display: "flex",
                 justifyContent: "space-around",
                 backgroundColor: "#eeeeee",
-                borderRadius: "25px",
+                borderRadius: "10px",
                 height: "40px",
               }}
             >

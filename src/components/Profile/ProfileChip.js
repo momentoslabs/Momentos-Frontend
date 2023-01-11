@@ -149,6 +149,7 @@ const ProfileChip = ({
             style={{
               position: "relative",
               margin: "auto",
+              top: "-1px",
               fontSize: "24px",
               height: "fit-content",
             }}

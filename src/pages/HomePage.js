@@ -131,7 +131,7 @@ const HomePage = ({}) => {
       )}
 
       <div>
-        <div style={{ margin: "auto" }}>
+        <div style={{ margin: "auto", width: "92.5%" }}>
           <MomentosList profile={profile} items={items} />
         </div>
       </div>

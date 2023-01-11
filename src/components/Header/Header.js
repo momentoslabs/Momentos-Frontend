@@ -58,9 +58,9 @@ const Header = ({}) => {
     >
       <div
         style={{
-          padding: "0px 15px",
+          padding: "0px 10px",
           position: "relative",
-          top: "-5px",
+          top: "-7.5px",
           textAlign: "center",
           fontSize: "xx-large",
           margin: "auto",
@@ -81,6 +81,7 @@ const Header = ({}) => {
             style={{
               position: "relative",
               top: "6px",
+              left: "-2px",
               padding: "0px 5px",
               height: "32px",
             }}
@@ -120,7 +121,7 @@ const Header = ({}) => {
                   fontWeight: "bold",
                   color: "#ffffff",
                   backgroundColor: "#ff0000",
-                  borderRadius: "20px",
+                  borderRadius: "10px",
                 }}
               >
                 {JSON.stringify(Object.keys(requests).length) > 99
@@ -130,7 +131,7 @@ const Header = ({}) => {
             )}
             <button
               className="uploadbutton"
-              style={{ width: "100px", margin: "auto" }}
+              style={{ width: "100px", margin: "auto 0px auto auto" }}
               onClick={() => {
                 signoutHandler();
               }}

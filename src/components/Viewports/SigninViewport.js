@@ -28,7 +28,7 @@ const SigninViewport = ({ children, setSigninVisible }) => {
       },
     };
     const requestBody = {
-      username: username,
+      username: username.toLowerCase(),
       password: password,
     };
 
