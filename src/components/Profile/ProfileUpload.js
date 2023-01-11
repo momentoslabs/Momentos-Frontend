@@ -4,9 +4,10 @@ import React, { useCallback, useRef, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Webcam from "react-webcam";
+import AWS from "aws-sdk";
+import { Buffer } from "buffer";
 
 import { useScrollBlock } from "../../utils/CustomHooks";
-import { useWindowDimensions } from "../../utils/CustomHooks";
 
 import Timer from "../Timer/Timer";
 import NoticeViewport from "../Viewports/NoticeViewport";
@@ -15,18 +16,33 @@ import snap from "../../graphics/icons/snap.png";
 import back from "../../graphics/icons/back.png";
 import rotate from "../../graphics/icons/rotate.png";
 import upload from "../../graphics/icons/upload.png";
-import image2 from "../../graphics/images/image.jpeg";
+import UploadViewport from "../Viewports/UploadViewport";
+
+const S3_BUCKET = "momentos-images";
+const REGION = "us-east-1";
+
+AWS.config.update({
+  accessKeyId: process.env.REACT_APP_S3_ACCESS_KEY_ID,
+  secretAccessKey: process.env.REACT_APP_S3_SECRET_ACCESS_KEY,
+});
+
+const myBucket = new AWS.S3({
+  params: { Bucket: S3_BUCKET },
+  region: REGION,
+});
 
 const ProfileUpload = ({ profile = {}, isOwner = false }) => {
   const uploadActive = Date.now() - profile.lastactive >= 86400000;
   const [uploadModalOpen, setUploadModalOpen] = useState(false);
+  const [cameraModalOpen, setCameraModalOpen] = useState(false);
   const [noticeVisible, setNoticeVisible] = useState(false);
+  const [uploadVisible, setUploadVisible] = useState(false);
   const [description, setDescription] = useState("");
   const [img, setImg] = useState(null);
   const [frontCameraActive, setFrontCameraActive] = useState(true);
   const webcamRef = useRef(null);
-
-  const dimensions = useWindowDimensions();
+  const [progress, setProgress] = useState(0);
+  const [selectedFile, setSelectedFile] = useState(null);
 
   const [blockScroll, allowScroll] = useScrollBlock();
 
@@ -41,19 +57,22 @@ const ProfileUpload = ({ profile = {}, isOwner = false }) => {
     setImg(imageSrc);
   }, [webcamRef]);
 
-  const submitHandler = async (event) => {
-    event.preventDefault();
+  const uploadMomento = async (isFile = false) => {
     const requestConfig = {
       headers: {
         "x-api-key": process.env.REACT_APP_API_KEY,
       },
     };
     const id = Date.now();
+    const imgData = isFile
+      ? 0
+      : new Buffer.from(img.replace(/^data:image\/\w+;base64,/, ""), "base64");
+    isFile ? uploadFile(selectedFile, id) : uploadFile(imgData, id);
     const requestBody1 = {
       id: id,
       ownerid: profile.id,
       description: description,
-      image: img,
+      image: `https://momentos-images.s3.amazonaws.com/${id}.jpeg`,
       likes: 0,
       fires: 0,
       claps: 0,
@@ -61,7 +80,7 @@ const ProfileUpload = ({ profile = {}, isOwner = false }) => {
     };
     const requestBody2 = {
       items: id,
-      lastactive: id,
+      lastactive: 0,
       lastpost: id,
     };
     await axios.post(
@@ -77,7 +96,8 @@ const ProfileUpload = ({ profile = {}, isOwner = false }) => {
       )
       .then(() => {
         navigate(`/profile/${profile.username}`);
-        setUploadModalOpen(false);
+        setUploadVisible(false);
+        setCameraModalOpen(false);
         allowScroll();
         setImg(null);
         window.location.reload();
@@ -87,12 +107,43 @@ const ProfileUpload = ({ profile = {}, isOwner = false }) => {
       });
   };
 
+  const submitHandler = async (event) => {
+    event.preventDefault();
+    uploadMomento();
+  };
+
+  const handleFileInput = (e) => {
+    setSelectedFile(e.target.files[0]);
+  };
+
+  const uploadFile = (file, id) => {
+    const params = {
+      ACL: "public-read",
+      Body: file,
+      Bucket: S3_BUCKET,
+      Key: `${id}.jpeg`,
+      ContentEncoding: "base64",
+    };
+
+    myBucket
+      .putObject(params)
+      .on("httpUploadProgress", (evt) => {
+        setProgress(Math.round((evt.loaded / evt.total) * 100));
+      })
+      .send((err) => {
+        if (err) console.log(err);
+      });
+  };
+
   return (
     <div
       style={{
         margin: "30px auto",
       }}
     >
+      <div>Native SDK File Upload Progress is {progress}%</div>
+
+      <button onClick={() => uploadFile(selectedFile)}> Upload to S3</button>
       {isOwner && (
         <div>
           <div>
@@ -101,7 +152,7 @@ const ProfileUpload = ({ profile = {}, isOwner = false }) => {
                 {!!uploadActive ? (
                   <button
                     onClick={() => {
-                      setUploadModalOpen(true);
+                      setUploadVisible(true);
                       blockScroll();
                     }}
                     className="uploadbutton"
@@ -138,7 +189,21 @@ const ProfileUpload = ({ profile = {}, isOwner = false }) => {
               </div>
             )}
           </div>
-          {uploadModalOpen && (
+          <div>
+            {uploadVisible && (
+              <div>
+                <UploadViewport
+                  setUploadVisible={setUploadVisible}
+                  setCameraModalOpen={setCameraModalOpen}
+                  handleFileInput={handleFileInput}
+                  selectedFile={selectedFile}
+                  setImg={setImg}
+                  uploadMomento={uploadMomento}
+                />
+              </div>
+            )}
+          </div>
+          {cameraModalOpen && (
             <div className="camera-container">
               <div
                 style={{
@@ -193,11 +258,18 @@ const ProfileUpload = ({ profile = {}, isOwner = false }) => {
                     </div>
                   </div>
                 ) : (
-                  <>
+                  <div
+                    style={{
+                      position: "fixed",
+                      top: "0",
+                      right: "0",
+                      bottom: "0",
+                      left: "0",
+                    }}
+                  >
                     <img
                       src={img}
                       style={{
-                        position: "fixed",
                         top: "0",
                         right: "0",
                         bottom: "0",
@@ -206,7 +278,7 @@ const ProfileUpload = ({ profile = {}, isOwner = false }) => {
                       }}
                       alt="snapshot"
                     />
-                  </>
+                  </div>
                 )}
                 <button
                   style={{
@@ -220,7 +292,7 @@ const ProfileUpload = ({ profile = {}, isOwner = false }) => {
                   }}
                   className="textinput"
                   onClick={() => {
-                    setUploadModalOpen(false);
+                    setCameraModalOpen(false);
                     allowScroll();
                     setImg(null);
                   }}

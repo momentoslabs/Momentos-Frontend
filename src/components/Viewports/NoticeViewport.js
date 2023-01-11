@@ -44,7 +44,6 @@ const NoticeViewport = ({ setNoticeVisible, message }) => {
                 display: "flex",
                 justifyContent: "space-around",
                 borderRadius: "25px",
-                border: "#000000 solid 2px",
                 padding: "20px",
                 height: "40px",
               }}

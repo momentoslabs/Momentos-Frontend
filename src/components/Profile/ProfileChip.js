@@ -137,6 +137,8 @@ const ProfileChip = ({
             height: "48px",
             borderRadius: "50%",
             margin: "8px 10px 0px 0px",
+            display: "flex",
+            alignItems: "center",
           }}
           onClick={() => {
             navigate(`/profile/${user.username}`);
@@ -147,8 +149,8 @@ const ProfileChip = ({
             style={{
               position: "relative",
               margin: "auto",
-              top: requesting ? "12px" : "23px",
               fontSize: "24px",
+              height: "fit-content",
             }}
           >
             {user.emoji}

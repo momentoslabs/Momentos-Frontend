@@ -19,7 +19,7 @@ const Navbar = ({}) => {
     <div
       className="footer"
       style={{
-        padding: "4px 0px",
+        padding: "4px 0px 0px 0px",
       }}
     >
       <div

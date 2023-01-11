@@ -19,10 +19,7 @@ const ProfileCard = ({ profile = {}, isOwner = false }) => {
         margin: "auto",
       }}
     >
-      <div
-        className="profilecard"
-        style={{ lineHeight: "50%", textAlign: "center" }}
-      >
+      <div className="profilecard" style={{ textAlign: "center" }}>
         <h3>{`@${profile.username}`}</h3>
         <div style={{ display: "flex", justifyContent: "center" }}>
           <div
@@ -31,20 +28,23 @@ const ProfileCard = ({ profile = {}, isOwner = false }) => {
               width: "128px",
               height: "128px",
               borderRadius: "50%",
+              display: "flex",
+              alignItems: "center",
             }}
           >
             <div
               style={{
                 position: "relative",
-                top: "64px",
+                margin: "auto",
+                top: "6px",
                 fontSize: "64px",
+                height: "fit-content",
               }}
             >
               {profile.emoji}
             </div>
           </div>
         </div>
-        <br />
         <div
           style={{
             display: "flex",
@@ -67,7 +67,7 @@ const ProfileCard = ({ profile = {}, isOwner = false }) => {
               className="highlightable"
               style={{
                 position: "relative",
-                top: "-10px",
+                top: "-1px",
                 height: "24px",
                 margin: "5px",
               }}

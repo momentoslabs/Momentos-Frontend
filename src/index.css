@@ -171,3 +171,24 @@ code {
 .highlightable:hover {
   opacity: 50%;
 }
+
+#browse-files {
+  opacity: 0;
+  position: absolute;
+  z-index: -1;
+}
+
+#browse-files-label {
+  font-family: CutiveMono-Regular, 'Courier', serif;
+  background-color: #212121;
+  color: #ffffff;
+  border: 2px solid #212121;
+  border-radius: 25px;
+  width: 84px;
+  height: 84px;
+}
+
+#browse-files-label:hover {
+  background-color: #ffffff;
+  color: #212121;
+}
