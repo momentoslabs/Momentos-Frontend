@@ -6,7 +6,7 @@ import { useSearchParams } from "react-router-dom";
 
 import MomentosCard from "../Momentos/MomentosCard";
 
-const MomentoViewport = ({ data = {}, setMomentoVisible }) => {
+const MomentoViewport = ({ profile = {}, data = {}, setMomentoVisible }) => {
   const [searchParams, setSearchParams] = useSearchParams();
 
   return (
@@ -39,7 +39,7 @@ const MomentoViewport = ({ data = {}, setMomentoVisible }) => {
               >
                 &#10005;
               </div>
-              <MomentosCard data={data} />
+              <MomentosCard profile={profile} data={data} />
             </div>
           </div>
         </div>

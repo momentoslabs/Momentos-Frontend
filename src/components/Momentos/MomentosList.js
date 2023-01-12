@@ -18,7 +18,7 @@ const MomentosList = ({ profile = {}, items = {} }) => {
           {items.length > 0 ? (
             <div>
               {items.map((item, index) => (
-                <MomentosCard key={index} data={item} />
+                <MomentosCard key={index} profile={profile} data={item} />
               ))}
             </div>
           ) : (

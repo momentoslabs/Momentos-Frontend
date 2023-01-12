@@ -4,11 +4,12 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-const MomentosCard = ({ data = {} }) => {
+const MomentosCard = ({ profile = {}, data = {} }) => {
   const [reactedLike, setReactedLike] = useState(false);
   const [reactedFire, setReactedFire] = useState(false);
   const [reactedClap, setReactedClap] = useState(false);
   const [reactedLaugh, setReactedLaugh] = useState(false);
+  const [sessionReactions, setSessionReactions] = useState([0, 0, 0, 0]);
 
   const [user, setUser] = useState({});
   const [sharetext, setSharetext] = useState("🔗");
@@ -19,6 +20,27 @@ const MomentosCard = ({ data = {} }) => {
     headers: {
       "x-api-key": process.env.REACT_APP_API_KEY,
     },
+  };
+
+  const getReactionData = async () => {
+    const res = await axios
+      .get(
+        `${process.env.REACT_APP_LIBRARYS_API_URL}/librarys/${profile.id}`,
+        requestConfig
+      )
+      .then(async (response) => {
+        console.log(response.data.reactions);
+        const reactions = !!response.data.reactions[data.id]
+          ? response.data.reactions[data.id]
+          : [0, 0, 0, 0];
+        console.log(reactions);
+        setSessionReactions(reactions);
+      })
+      .catch((error) => {
+        // console.log(error);
+      });
+
+    return res;
   };
 
   useEffect(() => {
@@ -36,6 +58,7 @@ const MomentosCard = ({ data = {} }) => {
         });
     };
     getUser();
+    getReactionData();
   }, []);
 
   const shareMomento = async () => {
@@ -43,6 +66,77 @@ const MomentosCard = ({ data = {} }) => {
     navigator.clipboard.writeText(`momentos.cc/?momento=${data.id}`);
     await new Promise((resolve) => setTimeout(resolve, 500));
     setSharetext("🔗");
+  };
+
+  const postReaction = async (reaction) => {
+    await axios
+      .get(
+        `${process.env.REACT_APP_LIBRARYS_API_URL}/librarys/${profile.id}`,
+        requestConfig
+      )
+      .then(async (response) => {
+        console.log(response.data.reactions);
+        let reactions = !!response.data.reactions[data.id]
+          ? response.data.reactions[data.id]
+          : [0, 0, 0, 0];
+        const active = reactions[reaction] === 0;
+        reactions[reaction] = active ? 1 : 0;
+        const requestBody1 = {
+          id: data.id,
+          reaction: reaction,
+          active: active,
+        };
+        console.log(requestBody1);
+        await axios
+          .post(
+            `${process.env.REACT_APP_ITEMS_API_URL}/reactions`,
+            requestBody1,
+            requestConfig
+          )
+          .then(() => {
+            // window.location.reload();
+          })
+          .catch((error) => {
+            // console.log(error);
+          });
+        const requestBody2 = {
+          id: profile.id,
+          isconnecting: false,
+          postid: data.id,
+          reactions: [...reactions],
+        };
+        await axios
+          .post(
+            `${process.env.REACT_APP_LIBRARYS_API_URL}/librarys`,
+            requestBody2,
+            requestConfig
+          )
+          .then(() => {
+            // window.location.reload();
+          })
+          .catch((error) => {
+            // console.log(error);
+          });
+      })
+      .catch((err) => {
+        // console.log(err);
+      });
+    console.log(sessionReactions);
+
+    //
+    // };
+    // axios
+    //   .post(
+    //     `${process.env.REACT_APP_ITEMS_API_URL}/reactions`,
+    //     requestBody1,
+    //     requestConfig
+    //   )
+    //   .then(() => {
+    //     // window.location.reload();
+    //   })
+    //   .catch((error) => {
+    //     // console.log(error);
+    //   });
   };
 
   return (
@@ -118,76 +212,122 @@ const MomentosCard = ({ data = {} }) => {
               justifyContent: "space-between",
             }}
           >
-            <div style={{ display: "flex", flexWrap: "wrap" }}>
-              <div
-                className="highlightable"
-                style={{
-                  maxWidth: "fit-content",
-                  height: "35px",
-                  margin: "10px 10px 10px 0px",
-                  backgroundColor: "#ddd",
-                  borderRadius: "10px",
-                  display: "flex",
-                  justifyContent: "center",
-                  fontSize: "x-large",
-                  alignItems: "center",
-                }}
-              >
-                <div style={{ padding: "5px 0px 5px 15px" }}>❤️</div>
-                <div style={{ padding: "5px 15px 5px 5px" }}>{data.likes}</div>
+            {!!sessionReactions && (
+              <div style={{ display: "flex", flexWrap: "wrap" }}>
+                <div
+                  className="highlightable"
+                  style={{
+                    maxWidth: "fit-content",
+                    height: "35px",
+                    margin: "10px 10px 10px 0px",
+                    backgroundColor: "#ddd",
+                    borderRadius: "10px",
+                    display: "flex",
+                    justifyContent: "center",
+                    fontSize: "x-large",
+                    alignItems: "center",
+                  }}
+                  onClick={() => {
+                    postReaction(0);
+                    setSessionReactions((prevSessionReactions) => [
+                      prevSessionReactions[0] === 0 ? 1 : 0,
+                      prevSessionReactions[1],
+                      prevSessionReactions[2],
+                      prevSessionReactions[3],
+                    ]);
+                  }}
+                >
+                  <div style={{ padding: "5px 0px 5px 15px" }}>❤️</div>
+                  <div style={{ padding: "5px 15px 5px 5px" }}>
+                    {data.likes + sessionReactions[0]}
+                  </div>
+                </div>
+                <div
+                  className="highlightable"
+                  style={{
+                    width: "fit-content",
+                    height: "35px",
+                    margin: "10px 10px 10px 0px",
+                    backgroundColor: "#ddd",
+                    borderRadius: "10px",
+                    display: "flex",
+                    justifyContent: "center",
+                    fontSize: "x-large",
+                    alignItems: "center",
+                  }}
+                  onClick={() => {
+                    postReaction(1);
+                    setSessionReactions((prevSessionReactions) => [
+                      prevSessionReactions[0],
+                      prevSessionReactions[1] === 0 ? 1 : 0,
+                      prevSessionReactions[2],
+                      prevSessionReactions[3],
+                    ]);
+                  }}
+                >
+                  <div style={{ padding: "5px 0px 5px 15px" }}>🔥</div>
+                  <div style={{ padding: "5px 15px 5px 5px" }}>
+                    {data.fires + sessionReactions[1]}
+                  </div>
+                </div>
+                <div
+                  className="highlightable"
+                  style={{
+                    width: "fit-content",
+                    height: "35px",
+                    margin: "10px 10px 10px 0px",
+                    backgroundColor: "#ddd",
+                    borderRadius: "10px",
+                    display: "flex",
+                    justifyContent: "center",
+                    fontSize: "x-large",
+                    alignItems: "center",
+                  }}
+                  onClick={() => {
+                    postReaction(2);
+                    setSessionReactions((prevSessionReactions) => [
+                      prevSessionReactions[0],
+                      prevSessionReactions[1],
+                      prevSessionReactions[2] === 0 ? 1 : 0,
+                      prevSessionReactions[3],
+                    ]);
+                  }}
+                >
+                  <div style={{ padding: "5px 0px 5px 15px" }}>👏</div>
+                  <div style={{ padding: "5px 15px 5px 5px" }}>
+                    {data.claps + sessionReactions[2]}
+                  </div>
+                </div>
+                <div
+                  className="highlightable"
+                  style={{
+                    width: "fit-content",
+                    height: "35px",
+                    margin: "10px 10px 10px 0px",
+                    backgroundColor: "#ddd",
+                    borderRadius: "10px",
+                    display: "flex",
+                    justifyContent: "center",
+                    fontSize: "x-large",
+                    alignItems: "center",
+                  }}
+                  onClick={() => {
+                    postReaction(3);
+                    setSessionReactions((prevSessionReactions) => [
+                      prevSessionReactions[0],
+                      prevSessionReactions[1],
+                      prevSessionReactions[2],
+                      prevSessionReactions[3] === 0 ? 1 : 0,
+                    ]);
+                  }}
+                >
+                  <div style={{ padding: "5px 0px 5px 15px" }}>😂</div>
+                  <div style={{ padding: "5px 15px 5px 5px" }}>
+                    {data.laughs + sessionReactions[3]}
+                  </div>
+                </div>
               </div>
-              <div
-                className="highlightable"
-                style={{
-                  width: "fit-content",
-                  height: "35px",
-                  margin: "10px 10px 10px 0px",
-                  backgroundColor: "#ddd",
-                  borderRadius: "10px",
-                  display: "flex",
-                  justifyContent: "center",
-                  fontSize: "x-large",
-                  alignItems: "center",
-                }}
-              >
-                <div style={{ padding: "5px 0px 5px 15px" }}>🔥</div>
-                <div style={{ padding: "5px 15px 5px 5px" }}>{data.fires}</div>
-              </div>
-              <div
-                className="highlightable"
-                style={{
-                  width: "fit-content",
-                  height: "35px",
-                  margin: "10px 10px 10px 0px",
-                  backgroundColor: "#ddd",
-                  borderRadius: "10px",
-                  display: "flex",
-                  justifyContent: "center",
-                  fontSize: "x-large",
-                  alignItems: "center",
-                }}
-              >
-                <div style={{ padding: "5px 0px 5px 15px" }}>👏</div>
-                <div style={{ padding: "5px 15px 5px 5px" }}>{data.claps}</div>
-              </div>
-              <div
-                className="highlightable"
-                style={{
-                  width: "fit-content",
-                  height: "35px",
-                  margin: "10px 10px 10px 0px",
-                  backgroundColor: "#ddd",
-                  borderRadius: "10px",
-                  display: "flex",
-                  justifyContent: "center",
-                  fontSize: "x-large",
-                  alignItems: "center",
-                }}
-              >
-                <div style={{ padding: "5px 0px 5px 15px" }}>😂</div>
-                <div style={{ padding: "5px 15px 5px 5px" }}>{data.laughs}</div>
-              </div>
-            </div>
+            )}
             <div
               className="highlightable"
               style={{

@@ -118,6 +118,9 @@ const HomePage = ({}) => {
       style={{
         padding: "60px 0px 40px 0px",
         margin: "auto",
+        width: "100%",
+        justifyContent: "center",
+        textAlign: "center",
       }}
     >
       {(signupVisible || searchParams.get("action") === "signup") && (
@@ -127,11 +130,15 @@ const HomePage = ({}) => {
         <SigninViewport setSigninVisible={setSigninVisible} />
       )}
       {momentoVisible && (
-        <MomentoViewport data={momento} setMomentoVisible={setMomentoVisible} />
+        <MomentoViewport
+          profile={profile}
+          data={momento}
+          setMomentoVisible={setMomentoVisible}
+        />
       )}
 
-      <div>
-        <div style={{ margin: "auto", width: "92.5%" }}>
+      <div style={{ width: "92.5%", margin: "auto" }}>
+        <div style={{ display: "flex", justifyContent: "center" }}>
           <MomentosList profile={profile} items={items} />
         </div>
       </div>

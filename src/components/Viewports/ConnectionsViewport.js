@@ -10,6 +10,7 @@ import search from "../../graphics/icons/search.png";
 const ConnectionsViewport = ({
   profile = {},
   isOwner = {},
+  isConnected = {},
   setConnectionsVisible,
 }) => {
   const [searchVisible, setSearchVisible] = useState(false);
@@ -103,6 +104,7 @@ const ConnectionsViewport = ({
                 backgroundColor: "#eeeeee",
                 borderRadius: "10px",
                 height: "40px",
+                alignItems: "center",
               }}
             >
               <p
@@ -131,23 +133,34 @@ const ConnectionsViewport = ({
               <div>
                 {!searchVisible && (
                   <div>
-                    {Object.keys(user.connections).length > 0 ? (
+                    {isOwner || isConnected ? (
                       <div>
-                        {Object.keys(user.connections).map(
-                          (connection, index) => (
-                            <ProfileChip
-                              key={index}
-                              profile={user}
-                              id={connection}
-                            />
-                          )
+                        {Object.keys(user.connections).length > 0 ? (
+                          <div>
+                            {Object.keys(user.connections).map(
+                              (connection, index) => (
+                                <ProfileChip
+                                  key={index}
+                                  profile={user}
+                                  id={connection}
+                                />
+                              )
+                            )}
+                          </div>
+                        ) : (
+                          <p style={{ lineHeight: "100%" }}>
+                            Start searching to connect with friends and they
+                            will show up here! 📇
+                          </p>
                         )}
                       </div>
                     ) : (
-                      <p style={{ lineHeight: "100%" }}>
-                        Start searching to connect with friends and they will
-                        show up here! 📇
-                      </p>
+                      <div>
+                        <p style={{ lineHeight: "100%" }}>
+                          Connect with this user first to view their
+                          connections! 🚧
+                        </p>
+                      </div>
                     )}
                   </div>
                 )}

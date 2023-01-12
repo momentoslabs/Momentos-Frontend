@@ -10,12 +10,13 @@ import { getUser } from "../services/AuthService";
 import ProfileCard from "../components/Profile/ProfileCard";
 import ProfileItems from "../components/Profile/ProfileItems";
 import Loading from "../components/Loading/Loading";
-
 import ProfileUpload from "../components/Profile/ProfileUpload";
+import Connect from "../components/Connect/Connect";
 
 const ProfilePage = () => {
-  const profile = getUser();
+  const [profile, setProfile] = useState(getUser());
   const [user, setUser] = useState({});
+  const [isConnected, setIsConnected] = useState(false);
 
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -41,20 +42,37 @@ const ProfilePage = () => {
   };
 
   useEffect(() => {
-    const getUser = async () => {
+    const getProfile = async () => {
       await axios
         .get(
-          `${process.env.REACT_APP_USERS_API_URL}/users/${username}`,
+          `${process.env.REACT_APP_USERS_API_URL}/users/${profile.id}`,
           requestConfig
         )
         .then((response) => {
-          setUser(response.data);
+          setProfile(response.data);
         })
         .catch((err) => {
           // console.log(err);
         });
     };
-    getUser();
+    getProfile().then(() => {
+      const getUser = async () => {
+        await axios
+          .get(
+            `${process.env.REACT_APP_USERS_API_URL}/users/${username}`,
+            requestConfig
+          )
+          .then((response) => {
+            setUser(response.data);
+          })
+          .catch((err) => {
+            // console.log(err);
+          });
+      };
+      getUser().then(() => {
+        setIsConnected(user.id in profile.connections);
+      });
+    });
   }, []);
 
   return (
@@ -63,11 +81,25 @@ const ProfilePage = () => {
         padding: "70px 0px 40px 0px",
       }}
     >
-      {!!user.username ? (
+      {!!user.username && profile.connections ? (
         <div style={{ width: "100%" }}>
-          <ProfileCard profile={user} isOwner={isOwner} />
-          <ProfileUpload profile={user} isOwner={isOwner} />
-          <ProfileItems profile={user} />
+          <ProfileCard
+            profile={user}
+            isOwner={isOwner}
+            isConnected={isConnected}
+          />
+          <div
+            style={{
+              margin: "30px auto",
+            }}
+          >
+            {isOwner ? (
+              <ProfileUpload profile={user} isOwner={isOwner} />
+            ) : (
+              <Connect profile={profile} user={user} requesting={false} />
+            )}
+          </div>
+          <ProfileItems profile={user} isConnected={isConnected} />
         </div>
       ) : (
         <div

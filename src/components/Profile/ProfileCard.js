@@ -7,7 +7,11 @@ import ConnectionsViewport from "../Viewports/ConnectionsViewport";
 
 import edit from "../../graphics/icons/edit.png";
 
-const ProfileCard = ({ profile = {}, isOwner = false }) => {
+const ProfileCard = ({
+  profile = {},
+  isOwner = false,
+  isConnected = false,
+}) => {
   const [editVisible, setEditVisible] = useState(false);
   const [connectionsVisible, setConnectionsVisible] = useState(false);
 
@@ -101,6 +105,7 @@ const ProfileCard = ({ profile = {}, isOwner = false }) => {
           <ConnectionsViewport
             profile={profile}
             isOwner={isOwner}
+            isConnected={isConnected}
             setConnectionsVisible={setConnectionsVisible}
           />
         )}
