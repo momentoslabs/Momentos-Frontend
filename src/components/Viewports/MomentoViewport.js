@@ -1,7 +1,6 @@
 "use es6";
 
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React from "react";
 import { useSearchParams } from "react-router-dom";
 
 import MomentosCard from "../Momentos/MomentosCard";
@@ -12,7 +11,13 @@ const MomentoViewport = ({ profile = {}, data = {}, setMomentoVisible }) => {
   return (
     <div>
       {!!data && (
-        <div className="modal-container">
+        <div
+          className="modal-container"
+          style={{
+            padding: "20px",
+            overflowY: "scroll",
+          }}
+        >
           <div
             style={{
               backgroundColor: "#ffffff",

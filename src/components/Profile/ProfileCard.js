@@ -53,7 +53,7 @@ const ProfileCard = ({
             height: "0px",
             justifyContent: "center",
             padding: "10px 0px",
-            margin: "0px 0px 0px 10px",
+            margin: "0px",
           }}
         >
           <h2
@@ -71,7 +71,7 @@ const ProfileCard = ({
                 position: "relative",
                 top: "-1px",
                 height: "24px",
-                margin: "5px",
+                margin: "5px 5px 5px 7.5px",
               }}
               onClick={() => setEditVisible(true)}
               src={edit}

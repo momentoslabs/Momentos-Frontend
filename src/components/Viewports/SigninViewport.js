@@ -75,7 +75,7 @@ const SigninViewport = ({ children, setSigninVisible }) => {
             type="text"
             value={username}
             placeholder="Username"
-            maxlength="24"
+            maxLength="24"
             onChange={(event) => setUsername(event.target.value)}
           />
           <br />
@@ -85,7 +85,7 @@ const SigninViewport = ({ children, setSigninVisible }) => {
             type="password"
             value={password}
             placeholder="Password"
-            maxlength="24"
+            maxLength="24"
             onChange={(event) => setPassword(event.target.value)}
           />
           <br />

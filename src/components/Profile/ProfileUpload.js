@@ -324,7 +324,7 @@ const ProfileUpload = ({ profile = {}, isOwner = false }) => {
                       type="description"
                       value={description}
                       placeholder="Description of this momento."
-                      maxlength="48"
+                      maxLength="48"
                       cols="23"
                       rows="2"
                       onChange={(event) => setDescription(event.target.value)}

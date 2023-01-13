@@ -88,7 +88,7 @@ const EditViewport = ({ profile = {}, setEditVisible }) => {
                 type="username"
                 value={username}
                 placeholder="New username"
-                maxlength="24"
+                maxLength="24"
                 onChange={(event) => setUsername(event.target.value)}
               />
               <input
@@ -96,7 +96,7 @@ const EditViewport = ({ profile = {}, setEditVisible }) => {
                 type="name"
                 value={name}
                 placeholder="New name"
-                maxlength="48"
+                maxLength="48"
                 onChange={(event) => setName(event.target.value)}
               />
               <input
@@ -104,7 +104,7 @@ const EditViewport = ({ profile = {}, setEditVisible }) => {
                 type="email"
                 value={email}
                 placeholder="New email"
-                maxlength="48"
+                maxLength="48"
                 onChange={(event) => setEmail(event.target.value)}
               />
               <div style={{ display: "flex", justifyContent: "center" }}>
@@ -114,7 +114,7 @@ const EditViewport = ({ profile = {}, setEditVisible }) => {
                   type="color"
                   value={color}
                   placeholder="New color"
-                  maxlength="7"
+                  maxLength="7"
                   onChange={(event) => {
                     setColor(event.target.value);
                   }}
@@ -125,7 +125,7 @@ const EditViewport = ({ profile = {}, setEditVisible }) => {
                 type="emoji"
                 value={emoji}
                 placeholder="New emoji"
-                maxlength="12"
+                maxLength="12"
                 onChange={(event) => setEmoji(event.target.value)}
               />
               <input

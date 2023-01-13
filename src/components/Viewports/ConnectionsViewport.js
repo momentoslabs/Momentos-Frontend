@@ -179,9 +179,9 @@ const ConnectionsViewport = ({
                         type="searchedUsername"
                         value={searchedUsername}
                         placeholder="Search by username"
-                        maxlength="24"
+                        maxLength="24"
                         onChange={(event) =>
-                          setSearchedUsername(event.target.value)
+                          setSearchedUsername(event.target.value.toLowerCase())
                         }
                       />
                       <input

@@ -1,18 +1,15 @@
 "use es6";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 const MomentosCard = ({ profile = {}, data = {} }) => {
-  const [reactedLike, setReactedLike] = useState(false);
-  const [reactedFire, setReactedFire] = useState(false);
-  const [reactedClap, setReactedClap] = useState(false);
-  const [reactedLaugh, setReactedLaugh] = useState(false);
-  const [sessionReactions, setSessionReactions] = useState([0, 0, 0, 0]);
-
+  const [initialReactions, setInitialReactions] = useState(null);
+  const [sessionReactions, setSessionReactions] = useState(null);
   const [user, setUser] = useState({});
   const [sharetext, setSharetext] = useState("🔗");
+  const [descriptionVisible, setDescriptionVisible] = useState(false);
 
   const navigate = useNavigate();
 
@@ -29,11 +26,13 @@ const MomentosCard = ({ profile = {}, data = {} }) => {
         requestConfig
       )
       .then(async (response) => {
+        console.log(data.id);
         console.log(response.data.reactions);
         const reactions = !!response.data.reactions[data.id]
           ? response.data.reactions[data.id]
           : [0, 0, 0, 0];
-        console.log(reactions);
+        console.log(`${data.id}: ${reactions}`);
+        setInitialReactions(reactions);
         setSessionReactions(reactions);
       })
       .catch((error) => {
@@ -63,7 +62,9 @@ const MomentosCard = ({ profile = {}, data = {} }) => {
 
   const shareMomento = async () => {
     setSharetext("✔️");
-    navigator.clipboard.writeText(`momentos.cc/?momento=${data.id}`);
+    navigator.clipboard.writeText(
+      `https://www.momentos.cc/?momento=${data.id}`
+    );
     await new Promise((resolve) => setTimeout(resolve, 500));
     setSharetext("🔗");
   };
@@ -122,21 +123,6 @@ const MomentosCard = ({ profile = {}, data = {} }) => {
         // console.log(err);
       });
     console.log(sessionReactions);
-
-    //
-    // };
-    // axios
-    //   .post(
-    //     `${process.env.REACT_APP_ITEMS_API_URL}/reactions`,
-    //     requestBody1,
-    //     requestConfig
-    //   )
-    //   .then(() => {
-    //     // window.location.reload();
-    //   })
-    //   .catch((error) => {
-    //     // console.log(error);
-    //   });
   };
 
   return (
@@ -189,22 +175,47 @@ const MomentosCard = ({ profile = {}, data = {} }) => {
               @{user.username}
             </h4>
           </div>
-          <img
-            src={data.image}
-            style={{
-              borderRadius: "10px",
-              maxWidth: "100%",
-              maxHeight: "300px",
-            }}
-          />
           <div
             style={{
-              textAlign: "left",
-              fontSize: "large",
-              padding: "10px 0px",
+              position: "relative",
+            }}
+            onClick={() => {
+              setDescriptionVisible(!descriptionVisible);
             }}
           >
-            {data.description}
+            <img
+              src={data.image}
+              style={{
+                borderRadius: "10px",
+                width: "100%",
+              }}
+            />
+            {descriptionVisible && (
+              <div
+                style={{
+                  borderRadius: "10px",
+                  position: "absolute",
+                  display: "block",
+                  transform: "translateX(-50%)",
+                  left: "50%",
+                  top: "0",
+                  width: "100%",
+                  height: "99%",
+                  background: "rgba(0, 0, 0, 0.75)",
+                  color: "#fff",
+                }}
+              >
+                <h4
+                  style={{
+                    margin: "10px",
+                    fontSize: "18px",
+                    textAlign: "left",
+                  }}
+                >
+                  {data.description}
+                </h4>
+              </div>
+            )}
           </div>
           <div
             style={{
@@ -220,7 +231,8 @@ const MomentosCard = ({ profile = {}, data = {} }) => {
                     maxWidth: "fit-content",
                     height: "35px",
                     margin: "10px 10px 10px 0px",
-                    backgroundColor: "#ddd",
+                    color: !!sessionReactions[0] ? "#ddd" : "#212121",
+                    backgroundColor: !!sessionReactions[0] ? "#212121" : "#ddd",
                     borderRadius: "10px",
                     display: "flex",
                     justifyContent: "center",
@@ -237,9 +249,11 @@ const MomentosCard = ({ profile = {}, data = {} }) => {
                     ]);
                   }}
                 >
-                  <div style={{ padding: "5px 0px 5px 15px" }}>❤️</div>
-                  <div style={{ padding: "5px 15px 5px 5px" }}>
-                    {data.likes + sessionReactions[0]}
+                  <div style={{ padding: "5px 0px 5px 7.5px" }}>❤️</div>
+                  <div style={{ padding: "5px 7.5px 5px 5px" }}>
+                    <h4>
+                      {data.likes + sessionReactions[0] - initialReactions[0]}
+                    </h4>
                   </div>
                 </div>
                 <div
@@ -248,7 +262,8 @@ const MomentosCard = ({ profile = {}, data = {} }) => {
                     width: "fit-content",
                     height: "35px",
                     margin: "10px 10px 10px 0px",
-                    backgroundColor: "#ddd",
+                    color: !!sessionReactions[1] ? "#ddd" : "#212121",
+                    backgroundColor: !!sessionReactions[1] ? "#212121" : "#ddd",
                     borderRadius: "10px",
                     display: "flex",
                     justifyContent: "center",
@@ -265,9 +280,11 @@ const MomentosCard = ({ profile = {}, data = {} }) => {
                     ]);
                   }}
                 >
-                  <div style={{ padding: "5px 0px 5px 15px" }}>🔥</div>
-                  <div style={{ padding: "5px 15px 5px 5px" }}>
-                    {data.fires + sessionReactions[1]}
+                  <div style={{ padding: "5px 0px 5px 7.5px" }}>🔥</div>
+                  <div style={{ padding: "5px 7.5px 5px 5px" }}>
+                    <h4>
+                      {data.fires + sessionReactions[1] - initialReactions[1]}
+                    </h4>
                   </div>
                 </div>
                 <div
@@ -276,7 +293,8 @@ const MomentosCard = ({ profile = {}, data = {} }) => {
                     width: "fit-content",
                     height: "35px",
                     margin: "10px 10px 10px 0px",
-                    backgroundColor: "#ddd",
+                    color: !!sessionReactions[2] ? "#ddd" : "#212121",
+                    backgroundColor: !!sessionReactions[2] ? "#212121" : "#ddd",
                     borderRadius: "10px",
                     display: "flex",
                     justifyContent: "center",
@@ -293,9 +311,11 @@ const MomentosCard = ({ profile = {}, data = {} }) => {
                     ]);
                   }}
                 >
-                  <div style={{ padding: "5px 0px 5px 15px" }}>👏</div>
-                  <div style={{ padding: "5px 15px 5px 5px" }}>
-                    {data.claps + sessionReactions[2]}
+                  <div style={{ padding: "5px 0px 5px 7.5px" }}>👏</div>
+                  <div style={{ padding: "5px 7.5px 5px 5px" }}>
+                    <h4>
+                      {data.claps + sessionReactions[2] - initialReactions[2]}
+                    </h4>
                   </div>
                 </div>
                 <div
@@ -304,7 +324,8 @@ const MomentosCard = ({ profile = {}, data = {} }) => {
                     width: "fit-content",
                     height: "35px",
                     margin: "10px 10px 10px 0px",
-                    backgroundColor: "#ddd",
+                    color: !!sessionReactions[3] ? "#ddd" : "#212121",
+                    backgroundColor: !!sessionReactions[3] ? "#212121" : "#ddd",
                     borderRadius: "10px",
                     display: "flex",
                     justifyContent: "center",
@@ -321,9 +342,11 @@ const MomentosCard = ({ profile = {}, data = {} }) => {
                     ]);
                   }}
                 >
-                  <div style={{ padding: "5px 0px 5px 15px" }}>😂</div>
-                  <div style={{ padding: "5px 15px 5px 5px" }}>
-                    {data.laughs + sessionReactions[3]}
+                  <div style={{ padding: "5px 0px 5px 7.5px" }}>😂</div>
+                  <div style={{ padding: "5px 7.5px 5px 5px" }}>
+                    <h4>
+                      {data.laughs + sessionReactions[3] - initialReactions[3]}
+                    </h4>
                   </div>
                 </div>
               </div>
@@ -345,7 +368,7 @@ const MomentosCard = ({ profile = {}, data = {} }) => {
                 shareMomento();
               }}
             >
-              <div style={{ padding: "5px 10px 5px 10px" }}>{sharetext}</div>
+              <div style={{ padding: "5px 7.5px 5px 7.5px" }}>{sharetext}</div>
             </div>
           </div>
         </div>

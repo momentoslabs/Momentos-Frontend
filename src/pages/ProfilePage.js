@@ -2,8 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useParams } from "react-router-dom";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 
 import { getUser } from "../services/AuthService";
 
@@ -15,13 +14,16 @@ import Connect from "../components/Connect/Connect";
 
 const ProfilePage = () => {
   const [profile, setProfile] = useState(getUser());
+
+  const currentProfile = getUser();
+  console.log(profile);
   const [user, setUser] = useState({});
-  const [isConnected, setIsConnected] = useState(false);
+
+  const username = useLocation().pathname.split("/")[2];
 
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const { username } = useParams();
   console.log(username);
   useEffect(() => {
     if (!username) {
@@ -69,9 +71,7 @@ const ProfilePage = () => {
             // console.log(err);
           });
       };
-      getUser().then(() => {
-        setIsConnected(user.id in profile.connections);
-      });
+      getUser();
     });
   }, []);
 
@@ -81,12 +81,12 @@ const ProfilePage = () => {
         padding: "70px 0px 40px 0px",
       }}
     >
-      {!!user.username && profile.connections ? (
+      {!!user.username && profile.connections && currentProfile ? (
         <div style={{ width: "100%" }}>
           <ProfileCard
             profile={user}
             isOwner={isOwner}
-            isConnected={isConnected}
+            isConnected={profile.connections[user.id]}
           />
           <div
             style={{
@@ -96,10 +96,19 @@ const ProfilePage = () => {
             {isOwner ? (
               <ProfileUpload profile={user} isOwner={isOwner} />
             ) : (
-              <Connect profile={profile} user={user} requesting={false} />
+              <Connect
+                currentId={currentProfile.id}
+                profile={profile}
+                user={user}
+                requesting={false}
+              />
             )}
           </div>
-          <ProfileItems profile={user} isConnected={isConnected} />
+          <ProfileItems
+            profile={user}
+            isOwner={isOwner}
+            isConnected={profile.connections[user.id]}
+          />
         </div>
       ) : (
         <div

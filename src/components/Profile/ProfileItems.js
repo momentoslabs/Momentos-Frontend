@@ -23,7 +23,6 @@ const ProfileItems = ({
           display: "flex",
           margin: "auto",
           justifyContent: "center",
-          width: "360px",
           flexWrap: "wrap",
         }}
       >

@@ -102,7 +102,7 @@ const SignupViewport = ({ children, setSignupVisible }) => {
             type="text"
             value={username}
             placeholder="Username"
-            maxlength="24"
+            maxLength="24"
             onChange={(event) => setUsername(event.target.value)}
           />
           <br />
@@ -112,7 +112,7 @@ const SignupViewport = ({ children, setSignupVisible }) => {
             type="text"
             value={name}
             placeholder="Name"
-            maxlength="48"
+            maxLength="48"
             onChange={(event) => setName(event.target.value)}
           />
           <br />
@@ -122,7 +122,7 @@ const SignupViewport = ({ children, setSignupVisible }) => {
             type="text"
             value={email}
             placeholder="Email"
-            maxlength="48"
+            maxLength="48"
             onChange={(event) => setEmail(event.target.value)}
           />
           <br />
@@ -132,7 +132,7 @@ const SignupViewport = ({ children, setSignupVisible }) => {
             type="password"
             value={password}
             placeholder="Password"
-            maxlength="24"
+            maxLength="24"
             onChange={(event) => setPassword(event.target.value)}
           />
           <br />
@@ -142,7 +142,7 @@ const SignupViewport = ({ children, setSignupVisible }) => {
             type="password"
             value={password2}
             placeholder="Confirm Password"
-            maxlength="24"
+            maxLength="24"
             onChange={(event) => setPassword2(event.target.value)}
           />
           <br />

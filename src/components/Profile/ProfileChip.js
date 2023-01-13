@@ -4,6 +4,8 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
+import { getUser } from "../../services/AuthService";
+
 import { requestConfig } from "../../utils/Constants";
 
 import Connect from "../Connect/Connect";
@@ -18,6 +20,7 @@ const ProfileChip = ({
 
   const [user, setUser] = useState({});
   const [isVisible, setIsVisible] = useState(true);
+  const currentProfile = getUser();
 
   useEffect(() => {
     const getUser = async () => {
@@ -71,13 +74,13 @@ const ProfileChip = ({
         <div
           style={{
             textAlign: "left",
-            lineHeight: "5%",
+            lineHeight: "0%",
           }}
         >
           <p style={{ fontWeight: "bold" }}>@{user.username}</p>
-
-          {!!profile && !!user && (
+          {!!profile.connections && !!user && !!currentProfile.id && (
             <Connect
+              currentId={currentProfile.id}
               profile={profile}
               user={user}
               requesting={requesting}

@@ -3,9 +3,12 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
+import { getUser } from "../../services/AuthService";
+
 import { requestConfig } from "../../utils/Constants";
 
 const Connect = ({
+  currentId = 0,
   profile = {},
   user = {},
   requesting = false,
@@ -15,7 +18,9 @@ const Connect = ({
   const [mode, setMode] = useState(1);
 
   useEffect(() => {
-    user.id === profile.id
+    console.log(user.id);
+    console.log(currentId);
+    user.id === currentId
       ? setMode(-1)
       : setMode(
           !(user.id in profile.connections)
@@ -83,23 +88,21 @@ const Connect = ({
           // console.log(err);
         });
 
-      if (action === 2) {
-        const requestBody3 = {
-          connections: { id: profile.id, action: 2 },
-        };
-        axios
-          .post(
-            `${process.env.REACT_APP_USERS_API_URL}/users/${user.id}`,
-            requestBody3,
-            requestConfig
-          )
-          .then(() => {
-            // window.location.reload();
-          })
-          .catch((error) => {
-            // console.log(error);
-          });
-      }
+      const requestBody3 = {
+        connections: { id: profile.id, action: action },
+      };
+      axios
+        .post(
+          `${process.env.REACT_APP_USERS_API_URL}/users/${user.id}`,
+          requestBody3,
+          requestConfig
+        )
+        .then(() => {
+          // window.location.reload();
+        })
+        .catch((error) => {
+          // console.log(error);
+        });
     }
   };
 
